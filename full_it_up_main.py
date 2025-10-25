@@ -17,6 +17,7 @@ def reset_world():
     world = []
     chabear = Chabear()
     world.append(chabear)
+
     pass
 
 
@@ -25,15 +26,13 @@ def reset_world():
 def update_world():
     for o in world:
         o.update()
-    pass
 
 
 def render_world():
     clear_canvas()
     for o in world:
-        o.update()
+        o.draw()
     update_canvas()
-    pass
 
 
 
