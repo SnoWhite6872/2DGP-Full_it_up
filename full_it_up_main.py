@@ -1,17 +1,21 @@
 from pico2d import *
 
-
-
+from chabear import Cha_bear
 
 open_canvas()
 running = True
 
-def reset_world():
-    pass
-
 
 def handle_events():
+    global running
     pass
+
+def reset_world():
+    global chabear
+    chabear = Cha_bear()
+    pass
+
+
 
 
 def update_world():
