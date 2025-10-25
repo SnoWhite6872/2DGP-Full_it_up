@@ -2,8 +2,12 @@ from pico2d import *
 
 
 
+
 open_canvas()
 running = True
+
+def reset_world():
+    pass
 
 
 def handle_events():
@@ -14,14 +18,17 @@ def update_world():
     pass
 
 
-def draw_world():
+def render_world():
     pass
 
+
+
+reset_world()
 
 while running:
     handle_events()
     update_world()
-    draw_world()
+    render_world()
 
     delay(0.05)
 close_canvas()
