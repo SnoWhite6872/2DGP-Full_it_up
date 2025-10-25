@@ -1,13 +1,13 @@
 from pico2d import load_image
 
 
-class Cha_bear:
+class Chabear:
     def __init__(self):
-        self.image = load_image("Cha_bear.png")
+        self.image = load_image('Cha_bear.png')
         pass
     def draw(self):
-        self.draw()
+        self.image.draw(400, 300)
         pass
     def update(self):
-        self.update()
+
         pass
