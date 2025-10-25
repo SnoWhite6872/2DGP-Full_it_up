@@ -1,15 +1,7 @@
 from pico2d import *
 
+from bgbasic import BGbasic
 from chabear import Chabear
-
-class BGbasic:
-    def __init__(self):
-        self.image = load_image('BG_basic.png')
-    def draw(self):
-        self.image.draw(504//2, 1050//2)
-    def update(self):
-        pass
-
 
 open_canvas(504, 1050)
 running = True
