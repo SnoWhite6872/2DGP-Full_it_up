@@ -6,7 +6,7 @@ class Chabear:
         self.image = load_image('Cha_bear.png')
         pass
     def draw(self):
-        self.image.draw(400, 300)
+        self.image.draw(252, 300)
         pass
     def update(self):
 
