@@ -2,7 +2,16 @@ from pico2d import *
 
 from chabear import Chabear
 
-open_canvas()
+class BGbasic:
+    def __init__(self):
+        self.image = load_image('BG_basic.png')
+    def draw(self):
+        self.image.draw(1440/2, 3120/2)
+    def update(self):
+        pass
+
+
+open_canvas(1440, 2000)
 running = True
 
 
@@ -13,8 +22,11 @@ def handle_events():
 def reset_world():
     global chabear
     global world
-
+    global bgbasic
     world = []
+
+    bgbasic = BGbasic()
+    world.append(bgbasic)
     chabear = Chabear()
     world.append(chabear)
 
