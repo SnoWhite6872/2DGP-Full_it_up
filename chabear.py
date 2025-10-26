@@ -9,5 +9,7 @@ class Chabear:
         self.image.draw(252, 300)
         pass
     def update(self):
+        pass
 
+    def handle_event(self, event):
         pass
