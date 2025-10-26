@@ -23,10 +23,12 @@ class Chabear:
         self.Run = Run(self)
         pass
     def draw(self):
+        self.Run.draw()
         pass
     def update(self):
+        self.Run.do()
         pass
 
     def handle_event(self, event):
-        #self.Run
+
         pass
