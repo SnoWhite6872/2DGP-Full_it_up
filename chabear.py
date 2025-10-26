@@ -12,7 +12,7 @@ class Run:
                 self.chabear.dir = -1
         elif e.type == SDL_KEYUP:
             if e.key == SDLK_RIGHT or e.key == SDLK_LEFT:
-                self.chabear.dir =0
+                self.chabear.dir =0   #딕셔너리로 상태 변경시 수정 필요
 
         pass
     def exit(self,e):
