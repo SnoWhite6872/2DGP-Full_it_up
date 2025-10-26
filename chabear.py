@@ -11,15 +11,14 @@ class Run:
             elif e.key == SDLK_LEFT:
                 self.chabear.dir = -1
         elif e.type == SDL_KEYUP:
-            if e.key == SDLK_RIGHT:
-                self.chabear.dir = -1
-            elif e.key == SDLK_LEFT:
-                self.chabear.dir = 1
+            if e.key == SDLK_RIGHT or e.key == SDLK_LEFT:
+                self.chabear.dir =0
+
         pass
     def exit(self,e):
         pass
     def do(self):
-        self.chabear.x += self.chabear.dir *10
+        self.chabear.x += self.chabear.dir *5
         pass
     def draw(self):
         self.chabear.image.draw(self.chabear.x, self.chabear.y)
