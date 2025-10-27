@@ -21,6 +21,27 @@ def w_up(e):
 def s_up(e):
     return e[0] == 'IMPUT' and e[1].type == SDL_KEYUP and e[1].key == SDLK_s
 
+class Run:
+    def __init__(self, chacat):
+        self.chacat = chacat
+
+    def enter(self,e):
+        if d_down(e) or a_up(e):
+            self.chacat.w_dir = 1  #오른쪽 이동
+        elif a_down(e) or d_up(e):
+            self.chacat.w_dir = -1
+        pass
+
+    def exit(self,e):
+        pass
+
+    def do(self):
+        self.chacat.x += self.chacat.w_dir * 5
+        pass
+
+    def draw(self):
+        self.chacat.image.draw(self.chacat.x, self.chacat.y)
+
 
 class Idle:
     def __init__(self, chacat):
@@ -36,6 +57,7 @@ class Idle:
         pass
 
     def draw(self):
+        self.chacat.image.draw(self.chacat.x, self.chacat.y)
         pass
 
 class Chacat:
