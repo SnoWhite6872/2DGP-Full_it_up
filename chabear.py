@@ -62,6 +62,34 @@ class HRun:
     def draw(self):
         self.chabear.image.draw(self.chabear.x, self.chabear.y)
 
+class DRun:
+    def __init__(self, chabear):
+        self.chabear = chabear
+
+    def enter(self,e):
+        if up_down(e) and left_down(e): #대각선 왼위쪽
+            self.chabear.h_dir = 1
+            self.chabear.w_dir = -1
+        elif up_down(e) and right_down(e): #대각선 오위쪽
+            self.chabear.h_dir = 1
+            self.chabear.w_dir = 1
+        elif down_down(e) and left_down(e): #대각선 왼아래쪽
+            self.chabear.h_dir = -1
+            self.chabear.w_dir = -1
+        elif down_down(e) and right_down(e): #대각선 오아래쪽
+            self.chabear.h_dir = -1
+            self.chabear.w_dir = 1
+
+    def exit(self,e):
+        pass
+
+    def do(self):
+        self.chabear.x += self.chabear.w_dir * 5
+        self.chabear.y += self.chabear.h_dir * 5
+        pass
+
+    def draw(self):
+        self.chabear.image.draw(self.chabear.x, self.chabear.y)
 
 class Idle:
     def __init__(self, chabear):
@@ -90,14 +118,16 @@ class Chabear:
 
         self.WRUN = WRun(self)
         self.HRUN = HRun(self)
+        self.DRUN = DRun(self)
         self.IDLE = Idle(self)
 
         self.state_machine = StateMachine(
             self.IDLE,               #시작 state
         {
             self.IDLE : { left_down : self.WRUN, right_down: self.WRUN, left_up: self.WRUN, right_up: self.WRUN, up_down: self.HRUN, down_down: self.HRUN},
-            self.WRUN : { left_up : self.IDLE, right_up: self.IDLE, left_down: self.IDLE, right_down:self.IDLE},
-            self.HRUN : { up_up : self.IDLE, down_up: self.IDLE, up_down: self.IDLE, down_down: self.IDLE},
+            self.WRUN : { left_up : self.IDLE, right_up: self.IDLE, left_down: self.IDLE, right_down: self.IDLE, up_down: self.DRUN, down_down: self.DRUN},
+            self.HRUN : { up_up : self.IDLE, down_up: self.IDLE, up_down: self.IDLE, down_down: self.IDLE, left_down: self.DRUN, right_down: self.DRUN},
+            self.DRUN : { up_up : self.WRUN, down_up : self.WRUN, left_up: self.HRUN, right_up: self.HRUN}
             }
         )
         pass
