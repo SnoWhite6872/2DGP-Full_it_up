@@ -2,6 +2,7 @@ from pico2d import *
 
 from bgbasic import BGbasic
 from chabear import Chabear
+from chacat import Chacat
 
 open_canvas(504, 1050)
 running = True
@@ -18,10 +19,12 @@ def handle_events():
             running = False
         else:
             chabear.handle_event(event)
+            chacat.handle_event(event)
     pass
 
 def reset_world():
     global chabear
+    global chacat
     global world
     global bgbasic
     world = []
@@ -30,6 +33,8 @@ def reset_world():
     world.append(bgbasic)
     chabear = Chabear()
     world.append(chabear)
+    chacat = Chacat()
+    world.append(chacat)
 
     pass
 

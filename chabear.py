@@ -67,7 +67,7 @@ class Idle():
 class Chabear:
     def __init__(self):
         self.image = load_image('Cha_bear.png')
-        self.x, self.y = 252, 525
+        self.x, self.y = 100, 200
         self.w_dir = 0
         self.h_dir = 0
 
