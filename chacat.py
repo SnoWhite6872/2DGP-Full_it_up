@@ -47,7 +47,9 @@ class Idle:
     def __init__(self, chacat):
         self.chacat = chacat
 
+
     def enter(self,e):
+        self.chacat.w_dir = 0
         pass
 
     def exit(self,e):
@@ -63,20 +65,32 @@ class Idle:
 class Chacat:
     def __init__(self):
         self.image = load_image('Cha_cat.png')
-        self.x, self.y = 300, 400
+        self.x, self.y = 200, 400
         self.w_dir = 0
         self.h_dir = 0
 
-        #self.state_machine = StateMachine()
+        self.RUN = Run(self)
+        self.IDLE = Idle(self)
+
+        self.state_machine = StateMachine(
+            self.IDLE,
+        {
+            self.IDLE : {d_down: self.RUN, a_down: self.RUN},
+            self.RUN : {d_up: self.IDLE, a_up: self.IDLE, d_down : self.IDLE, a_down: self.IDLE}
+
+            }
+        )
         pass
 
 
     def update(self):
+        self.state_machine.update()
         pass
 
     def draw(self):
+        self.state_machine.draw()
         pass
 
-    def handle_events(self, event):
-        #self.state_machine.handle_state_event(event)
+    def handle_event(self, event):
+        self.state_machine.handle_state_event(('IMPUT',event))
         pass
