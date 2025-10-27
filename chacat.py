@@ -21,10 +21,29 @@ def w_up(e):
 def s_up(e):
     return e[0] == 'IMPUT' and e[1].type == SDL_KEYUP and e[1].key == SDLK_s
 
+
+class Idle:
+    def __init__(self, chacat):
+        self.chacat = chacat
+
+    def enter(self,e):
+        pass
+
+    def exit(self,e):
+        pass
+
+    def do(self):
+        pass
+
+    def draw(self):
+        pass
+
 class Chacat:
     def __init__(self):
         self.image = load_image('Cha_cat.png')
         self.x, self.y = 300, 400
+        self.w_dir = 0
+        self.h_dir = 0
 
         #self.state_machine = StateMachine()
         pass

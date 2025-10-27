@@ -46,7 +46,7 @@ class Run:
     def draw(self):
         self.chabear.image.draw(self.chabear.x, self.chabear.y)
 
-class Idle():
+class Idle:
     def __init__(self, chabear):
         self.chabear = chabear
     def enter(self,e):
