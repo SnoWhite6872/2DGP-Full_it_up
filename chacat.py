@@ -1,5 +1,25 @@
 from pico2d import load_image
+from sdl2 import SDL_KEYDOWN, SDL_KEYUP, SDLK_w, SDLK_a, SDLK_s, SDLK_d
 from state_machine import StateMachine
+
+
+def a_down(e):
+    return e[0] == 'IMPUT' and e[1].type == SDL_KEYDOWN and e[1].key == SDLK_a
+def d_down(e):
+    return e[0] == 'IMPUT' and e[1].type == SDL_KEYDOWN and e[1].key == SDLK_d
+def w_down(e):
+    return e[0] == 'IMPUT' and e[1].type == SDL_KEYDOWN and e[1].key == SDLK_w
+def s_down(e):
+    return e[0] == 'IMPUT' and e[1].type == SDL_KEYDOWN and e[1].key == SDLK_s
+
+def a_up(e):
+    return e[0] == 'IMPUT' and e[1].type == SDL_KEYUP and e[1].key == SDLK_a
+def d_up(e):
+    return e[0] == 'IMPUT' and e[1].type == SDL_KEYUP and e[1].key == SDLK_d
+def w_up(e):
+    return e[0] == 'IMPUT' and e[1].type == SDL_KEYUP and e[1].key == SDLK_w
+def s_up(e):
+    return e[0] == 'IMPUT' and e[1].type == SDL_KEYUP and e[1].key == SDLK_s
 
 class Chacat:
     def __init__(self):
