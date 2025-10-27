@@ -18,22 +18,13 @@ class Run:
     def __init__(self, chabear):
         self.chabear = chabear
     def enter(self,e):
-        if e.type == SDL_KEYDOWN:
-            if e.key == SDLK_RIGHT:
-                self.chabear.w_dir =1
-            elif e.key == SDLK_LEFT:
-                self.chabear.w_dir = -1
-            elif e.key == SDLK_UP:
-                self.chabear.h_dir = 1
-            elif e.key == SDLK_DOWN:
-                self.chabear.h_dir = -1
-        elif e.type == SDL_KEYUP:
-            if e.key == SDLK_RIGHT or e.key == SDLK_LEFT:
-                self.chabear.w_dir =0   #딕셔너리로 상태 변경시 수정 필요
-            elif e.key == SDLK_UP or e.key ==SDLK_DOWN:
-                self.chabear.h_dir =0
+        if right_down(e) or left_up(e):
+            self.chabear.w_dir = 1  #오른쪽 이동 +
+        elif left_down(e) or right_up(e):
+            self.chabear.w_dir = -1
 
         pass
+
     def exit(self,e):
         pass
     def do(self):
@@ -47,11 +38,16 @@ class Idle():
     def __init__(self, chabear):
         self.chabear = chabear
     def enter(self,e):
+        self.chabear.w_dir = 0
+        self.chabear.h_dir = 0
         pass
+
     def exit(self,e):
         pass
+
     def do(self):
         pass
+
     def draw(self):
         self.chabear.image.draw(self.chabear.x, self.chabear.y)
 
