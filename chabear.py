@@ -53,17 +53,25 @@ class Chabear:
 
         self.RUN = Run(self)
         self.IDLE = Idle(self)
+
+        self.state_machine = StateMachine(
+            self.IDLE,               #시작 state
+        {
+            self.IDLE : { left_down : self.RUN, right_down: self.RUN},
+            self.RUN : { left_up : self.IDLE, right_up: self.IDLE},
+            }
+        )
         pass
 
     def update(self):
-        self.RUN.do()
+        self.state_machine.update()
         pass
 
     def draw(self):
-        self.RUN.draw()
+        self.state_machine.draw()
         pass
 
 
     def handle_event(self, event):
-        self.RUN.enter(event)
+        self.state_machine.handle_state_event(('INPUT',event))
         pass
