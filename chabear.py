@@ -22,7 +22,7 @@ def down_down(e):
 
 
 
-class Run:
+class WRun:
     def __init__(self, chabear):
         self.chabear = chabear
     def enter(self,e):
@@ -71,14 +71,14 @@ class Chabear:
         self.w_dir = 0
         self.h_dir = 0
 
-        self.RUN = Run(self)
+        self.WRUN = WRun(self)
         self.IDLE = Idle(self)
 
         self.state_machine = StateMachine(
             self.IDLE,               #시작 state
         {
-            self.IDLE : { left_down : self.RUN, right_down: self.RUN, down_down: self.RUN, up_down: self.RUN},
-            self.RUN : { left_up : self.IDLE, right_up: self.IDLE, left_down: self.IDLE, right_down:self.IDLE,down_up: self.IDLE, up_up: self.IDLE},
+            self.IDLE : { left_down : self.WRUN, right_down: self.WRUN, left_up: self.WRUN, right_up: self.WRUN},
+            self.WRUN : { left_up : self.IDLE, right_up: self.IDLE, left_down: self.IDLE, right_down:self.IDLE,down_up: self.IDLE, up_up: self.IDLE},
             }
         )
         pass

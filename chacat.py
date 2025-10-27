@@ -21,7 +21,7 @@ def w_up(e):
 def s_up(e):
     return e[0] == 'IMPUT' and e[1].type == SDL_KEYUP and e[1].key == SDLK_s
 
-class Run:
+class WRun:
     def __init__(self, chacat):
         self.chacat = chacat
 
@@ -69,14 +69,14 @@ class Chacat:
         self.w_dir = 0
         self.h_dir = 0
 
-        self.RUN = Run(self)
+        self.WRUN = WRun(self)
         self.IDLE = Idle(self)
 
         self.state_machine = StateMachine(
             self.IDLE,
         {
-            self.IDLE : {d_down: self.RUN, a_down: self.RUN},
-            self.RUN : {d_up: self.IDLE, a_up: self.IDLE, d_down : self.IDLE, a_down: self.IDLE}
+            self.IDLE : {d_down: self.WRUN, a_down: self.WRUN},
+            self.WRUN : {d_up: self.IDLE, a_up: self.IDLE, d_down : self.IDLE, a_down: self.IDLE}
 
             }
         )
