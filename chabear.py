@@ -6,11 +6,19 @@ def left_down(e):
     return e[0] == 'INPUT' and e[1].type == SDL_KEYDOWN and e[1].key == SDLK_LEFT
 def right_down(e):
     return e[0] == 'INPUT' and e[1].type == SDL_KEYDOWN and e[1].key == SDLK_RIGHT
+def up_up(e):
+    return e[0] == 'INPUT' and e[1].type == SDL_KEYUP and e[1].key == SDLK_UP
+def down_up(e):
+    return e[0] == 'INPUT' and e[1].type == SDL_KEYUP and e[1].key == SDLK_DOWN
+
 def left_up(e):
     return e[0] == 'INPUT' and e[1].type == SDL_KEYUP and e[1].key == SDLK_LEFT
 def right_up(e):
     return e[0] == 'INPUT' and e[1].type == SDL_KEYUP and e[1].key == SDLK_RIGHT
-
+def up_down(e):
+    return e[0] == 'INPUT' and e[1].type == SDL_KEYDOWN and e[1].key == SDLK_UP
+def down_down(e):
+    return e[0] == 'INPUT' and e[1].type == SDL_KEYDOWN and e[1].key == SDLK_DOWN
 
 
 
@@ -23,12 +31,16 @@ class Run:
         elif left_down(e) or right_up(e):
             self.chabear.w_dir = -1
 
+        if up_down(e) or down_up(e):
+            self.chabear.h_dir = 1
+        elif down_down(e) or up_up(e):
+            self.chabear.h_dir = -1
         pass
 
     def exit(self,e):
         pass
     def do(self):
-        self.chabear.x += self.chabear.w_dir *5
+        self.chabear.x += self.chabear.w_dir * 5
         self.chabear.y += self.chabear.h_dir * 5
         pass
     def draw(self):
@@ -65,8 +77,8 @@ class Chabear:
         self.state_machine = StateMachine(
             self.IDLE,               #시작 state
         {
-            self.IDLE : { left_down : self.RUN, right_down: self.RUN},
-            self.RUN : { left_up : self.IDLE, right_up: self.IDLE},
+            self.IDLE : { left_down : self.RUN, right_down: self.RUN, down_down: self.RUN, up_down: self.RUN},
+            self.RUN : { left_up : self.IDLE, right_up: self.IDLE, down_up: self.IDLE, up_up: self.IDLE},
             }
         )
         pass
