@@ -50,18 +50,19 @@ class Chabear:
         self.w_dir = 0
         self.h_dir = 0
 
-        self.Run = Run(self)
+        self.RUN = Run(self)
+        self.IDLE = Idle(self)
         pass
 
     def update(self):
-        self.Run.do()
+        self.RUN.do()
         pass
 
     def draw(self):
-        self.Run.draw()
+        self.RUN.draw()
         pass
 
 
     def handle_event(self, event):
-        self.Run.enter(event)
+        self.RUN.enter(event)
         pass
