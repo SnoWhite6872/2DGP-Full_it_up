@@ -30,7 +30,17 @@ class Run:
     def draw(self):
         self.chabear.image.draw(self.chabear.x, self.chabear.y)
 
-
+class Idle():
+    def __init__(self, chabear):
+        self.chabear = chabear
+    def enter(self,e):
+        pass
+    def exit(self,e):
+        pass
+    def do(self):
+        pass
+    def draw(self):
+        self.chabear.image.draw(self.chabear.x, self.chabear.y)
 
 
 class Chabear:
