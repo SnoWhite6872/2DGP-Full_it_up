@@ -27,7 +27,7 @@ class Run:
         self.chabear = chabear
     def enter(self,e):
         if right_down(e) or left_up(e):
-            self.chabear.w_dir = 1  #오른쪽 이동 +
+            self.chabear.w_dir = 1  #오른쪽 이동
         elif left_down(e) or right_up(e):
             self.chabear.w_dir = -1
 
@@ -78,7 +78,7 @@ class Chabear:
             self.IDLE,               #시작 state
         {
             self.IDLE : { left_down : self.RUN, right_down: self.RUN, down_down: self.RUN, up_down: self.RUN},
-            self.RUN : { left_up : self.IDLE, right_up: self.IDLE, down_up: self.IDLE, up_up: self.IDLE},
+            self.RUN : { left_up : self.IDLE, right_up: self.IDLE, left_down: self.IDLE, right_down:self.IDLE,down_up: self.IDLE, up_up: self.IDLE},
             }
         )
         pass
