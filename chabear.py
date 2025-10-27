@@ -1,5 +1,6 @@
 from pico2d import load_image
 from sdl2 import SDL_KEYUP, SDL_KEYDOWN, SDLK_RIGHT, SDLK_LEFT, SDLK_UP, SDLK_DOWN
+from state_machine import StateMachine
 
 class Run:
     def __init__(self, chabear):
