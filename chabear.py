@@ -30,6 +30,8 @@ class WRun:
             self.chabear.w_dir = 1  #오른쪽 이동
         elif left_down(e) or right_up(e):
             self.chabear.w_dir = -1
+        elif up_up(e) or down_up(e):
+            self.chabear.h_dir = 0
 
     def exit(self,e):
         pass
@@ -49,6 +51,8 @@ class HRun:
             self.chabear.h_dir = 1
         elif down_down(e) or up_up(e):
             self.chabear.h_dir = -1
+        elif right_up(e) or left_up(e):
+            self.chabear.w_dir = 0
 
     def exit(self,e):
         pass
@@ -129,8 +133,8 @@ class Chabear:
             self.IDLE,               #시작 state
         {
             self.IDLE : { left_down : self.WRUN, right_down: self.WRUN, left_up: self.WRUN, right_up: self.WRUN, up_down: self.HRUN, down_down: self.HRUN},
-            self.WRUN : { left_up : self.IDLE, right_up: self.IDLE, left_down: self.IDLE, right_down: self.IDLE, up_down: self.HRUN, down_down: self.HRUN},
-            self.HRUN : { up_up : self.IDLE, down_up: self.IDLE, up_down: self.IDLE, down_down: self.IDLE, left_down: self.WRUN, right_down: self.WRUN},
+            self.WRUN : { left_up : self.IDLE, right_up: self.IDLE, left_down: self.IDLE, right_down: self.IDLE, up_down: self.HRUN, down_down: self.HRUN, up_up : self.WRUN, down_up : self.WRUN},
+            self.HRUN : { up_up : self.IDLE, down_up: self.IDLE, up_down: self.IDLE, down_down: self.IDLE, left_down: self.WRUN, right_down: self.WRUN, right_up : self.HRUN, left_up : self.HRUN},
             }
         )
         pass
