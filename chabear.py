@@ -104,17 +104,17 @@ class Chabear:
             self.HRUN : { up_up : self.IDLE, down_up: self.IDLE, up_down: self.IDLE, down_down: self.IDLE, left_down: self.WRUN, right_down: self.WRUN, right_up : self.HRUN, left_up : self.HRUN},
             }
         )
-        pass
+
 
     def update(self):
         self.state_machine.update()
-        pass
+
 
     def draw(self):
         self.state_machine.draw()
-        pass
+
 
 
     def handle_event(self, event):
-        self.state_machine.handle_state_event(('INPUT',event))
-        pass
+        self.state_machine.handle_state_event(('INPUT', event))
+

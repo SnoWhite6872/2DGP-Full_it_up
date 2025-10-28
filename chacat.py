@@ -4,22 +4,22 @@ from state_machine import StateMachine
 
 
 def a_down(e):
-    return e[0] == 'IMPUT' and e[1].type == SDL_KEYDOWN and e[1].key == SDLK_a
+    return e[0] == 'INPUT' and e[1].type == SDL_KEYDOWN and e[1].key == SDLK_a
 def d_down(e):
-    return e[0] == 'IMPUT' and e[1].type == SDL_KEYDOWN and e[1].key == SDLK_d
+    return e[0] == 'INPUT' and e[1].type == SDL_KEYDOWN and e[1].key == SDLK_d
 def w_down(e):
-    return e[0] == 'IMPUT' and e[1].type == SDL_KEYDOWN and e[1].key == SDLK_w
+    return e[0] == 'INPUT' and e[1].type == SDL_KEYDOWN and e[1].key == SDLK_w
 def s_down(e):
-    return e[0] == 'IMPUT' and e[1].type == SDL_KEYDOWN and e[1].key == SDLK_s
+    return e[0] == 'INPUT' and e[1].type == SDL_KEYDOWN and e[1].key == SDLK_s
 
 def a_up(e):
-    return e[0] == 'IMPUT' and e[1].type == SDL_KEYUP and e[1].key == SDLK_a
+    return e[0] == 'INPUT' and e[1].type == SDL_KEYUP and e[1].key == SDLK_a
 def d_up(e):
-    return e[0] == 'IMPUT' and e[1].type == SDL_KEYUP and e[1].key == SDLK_d
+    return e[0] == 'INPUT' and e[1].type == SDL_KEYUP and e[1].key == SDLK_d
 def w_up(e):
-    return e[0] == 'IMPUT' and e[1].type == SDL_KEYUP and e[1].key == SDLK_w
+    return e[0] == 'INPUT' and e[1].type == SDL_KEYUP and e[1].key == SDLK_w
 def s_up(e):
-    return e[0] == 'IMPUT' and e[1].type == SDL_KEYUP and e[1].key == SDLK_s
+    return e[0] == 'INPUT' and e[1].type == SDL_KEYUP and e[1].key == SDLK_s
 
 class WRun:
     def __init__(self, chacat):
@@ -120,5 +120,5 @@ class Chacat:
         pass
 
     def handle_event(self, event):
-        self.state_machine.handle_state_event(('IMPUT',event))
+        self.state_machine.handle_state_event(('INPUT', event))
         pass

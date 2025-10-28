@@ -13,7 +13,7 @@ def event_to_string(state_event):
 
     state_event_type = state_event[0]  # state_event is ('INPUT', event)
     event = state_event[1]  # state_event is ('INPUT', event)
-    if state_event_type != 'INPUT':
+    if state_event_type is not 'INPUT':
         return f"{state_event}"
 
     # pico2d 모듈에서 모든 SDLK_ 상수 자동 수집
