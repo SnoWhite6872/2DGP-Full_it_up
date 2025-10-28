@@ -107,8 +107,6 @@ class Idle:
         pass
 
     def do(self):
-        self.chabear.w_dir = 0
-        self.chabear.h_dir = 0
         pass
 
     def draw(self):
