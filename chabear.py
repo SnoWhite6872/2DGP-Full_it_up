@@ -31,8 +31,6 @@ class WRun:
         elif left_down(e) or right_up(e):
             self.chabear.w_dir = -1
 
-
-
     def exit(self,e):
         pass
     def do(self):
@@ -56,6 +54,7 @@ class HRun:
         pass
 
     def do(self):
+        self.chabear.x += self.chabear.w_dir * 5
         self.chabear.y += self.chabear.h_dir * 5
         pass
 
@@ -84,17 +83,17 @@ class HRun:
 #                     elif event.key == SDLK_LEFT:
 #                         self.chabear.h_dir = -1
 #                         self.chabear.w_dir = -1
-
-    def exit(self,e):
-        pass
-
-    def do(self):
-        self.chabear.x += self.chabear.w_dir * 5
-        self.chabear.y += self.chabear.h_dir * 5
-        pass
-
-    def draw(self):
-        self.chabear.image.draw(self.chabear.x, self.chabear.y)
+#
+#     def exit(self,e):
+#         pass
+#
+#     def do(self):
+#         self.chabear.x += self.chabear.w_dir * 5
+#         self.chabear.y += self.chabear.h_dir * 5
+#         pass
+#
+#     def draw(self):
+#         self.chabear.image.draw(self.chabear.x, self.chabear.y)
 
 class Idle:
     def __init__(self, chabear):
@@ -108,6 +107,8 @@ class Idle:
         pass
 
     def do(self):
+        self.chabear.w_dir = 0
+        self.chabear.h_dir = 0
         pass
 
     def draw(self):
@@ -123,15 +124,15 @@ class Chabear:
 
         self.WRUN = WRun(self)
         self.HRUN = HRun(self)
-        self.DRUN = DRun(self)
+        # self.DRUN = DRun(self)
         self.IDLE = Idle(self)
 
         self.state_machine = StateMachine(
             self.IDLE,               #시작 state
         {
             self.IDLE : { left_down : self.WRUN, right_down: self.WRUN, left_up: self.WRUN, right_up: self.WRUN, up_down: self.HRUN, down_down: self.HRUN},
-            self.WRUN : { left_up : self.IDLE, right_up: self.IDLE, left_down: self.IDLE, right_down: self.IDLE, up_down: self.DRUN, down_down: self.DRUN},
-            self.HRUN : { up_up : self.IDLE, down_up: self.IDLE, up_down: self.IDLE, down_down: self.IDLE},
+            self.WRUN : { left_up : self.IDLE, right_up: self.IDLE, left_down: self.IDLE, right_down: self.IDLE, up_down: self.HRUN, down_down: self.HRUN},
+            self.HRUN : { up_up : self.IDLE, down_up: self.IDLE, up_down: self.IDLE, down_down: self.IDLE, left_down: self.WRUN, right_down: self.WRUN},
             }
         )
         pass
