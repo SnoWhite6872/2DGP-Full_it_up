@@ -1,15 +1,22 @@
-world = []
+#world에 layer을 추가하여 객체 속성에 따라 관리
 
-def add_object(o):
-    world.append(o)
+world = [[],[]]
+
+def add_object(o, l = 0):
+    world[l].append(o)
 
 def update():
-    for o in world:
-        o.update()
-
+    for layer in world:
+        for o in layer:
+            o.update()
 def render():
-    for o in world:
-        o.draw()
+    for layer in world:
+        for o in layer:
+            o.draw()
+
 
 def remove_object(o):
-    world.remove(o)
+    for layer in world:
+        if o in layer:
+            layer.remove(o)
+            return

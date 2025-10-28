@@ -29,11 +29,11 @@ def reset_world():
     global bgbasic
 
     bgbasic = BGbasic()
-    game_world.add_object(bgbasic)
+    game_world.add_object(bgbasic, 0)
     chabear = Chabear()
-    game_world.add_object(chabear)
+    game_world.add_object(chabear, 1)
     chacat = Chacat()
-    game_world.add_object(chacat)
+    game_world.add_object(chacat, 1)
 
     pass
 
