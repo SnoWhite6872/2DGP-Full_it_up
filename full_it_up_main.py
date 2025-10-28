@@ -4,15 +4,15 @@ from bgbasic import BGbasic
 from chabear import Chabear
 from chacat import Chacat
 
-open_canvas(504, 1050)
-running = True
+
 
 
 def handle_events():
     global running
 
-    events = get_events()
-    for event in events:
+    event_list = get_events()
+
+    for event in event_list:
         if event.type == SDL_QUIT:
             running = False
         elif event.type == SDL_KEYDOWN and event.key == SDLK_ESCAPE:
@@ -52,7 +52,8 @@ def render_world():
         o.draw()
     update_canvas()
 
-
+running = True
+open_canvas(504, 1050)
 
 reset_world()
 
@@ -61,5 +62,5 @@ while running:
     update_world()
     render_world()
 
-    delay(0.05)
+    delay(0.01)
 close_canvas()

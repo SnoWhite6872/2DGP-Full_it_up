@@ -30,11 +30,8 @@ class WRun:
             self.chacat.w_dir = 1  #오른쪽 이동
         elif a_down(e) or d_up(e):
             self.chacat.w_dir = -1
-        elif w_down(e) or s_up(e):
-            self.chacat.h_dir = 1
-        elif s_down(e) or w_up(e):
-            self.chacat.h_dir = -1
-
+        elif w_up(e) or s_up(e):
+            self.chacat.h_dir = 0
 
     def exit(self,e):
         pass
@@ -47,6 +44,29 @@ class WRun:
     def draw(self):
         self.chacat.image.draw(self.chacat.x, self.chacat.y)
 
+class HRun:
+        def __init__(self, chacat):
+            self.chacat = chacat
+
+        def enter(self,e):
+            if w_down(e) or s_up(e):
+                self.chacat.h_dir = 1
+            elif s_down(e) or w_up(e):
+                self.chacat.h_dir = -1
+            elif a_up(e) or d_up(e):
+                self.chacat.w_dir = 0
+
+        def exit(self,e):
+            pass
+
+        def do(self):
+            self.chacat.x += self.chacat.w_dir * 5
+            self.chacat.y += self.chacat.h_dir * 5
+            pass
+
+        def draw(self):
+            self.chacat.image.draw(self.chacat.x, self.chacat.y)
+
 
 class Idle:
     def __init__(self, chacat):
@@ -55,6 +75,7 @@ class Idle:
 
     def enter(self,e):
         self.chacat.w_dir = 0
+        self.chacat.h_dir = 0
         pass
 
     def exit(self,e):
@@ -75,13 +96,15 @@ class Chacat:
         self.h_dir = 0
 
         self.WRUN = WRun(self)
+        self.HRUN = HRun(self)
         self.IDLE = Idle(self)
 
         self.state_machine = StateMachine(
             self.IDLE,
         {
-            self.IDLE : {d_down: self.WRUN, a_down: self.WRUN, w_down : self.WRUN , s_down : self.WRUN, w_up: self.WRUN, s_up : self.WRUN, a_up : self.WRUN, d_up : self.WRUN},
-            self.WRUN : {d_up: self.IDLE, a_up: self.IDLE, d_down : self.IDLE, a_down: self.IDLE, w_up : self.IDLE, s_up : self.IDLE, w_down : self.IDLE, s_down : self.IDLE},
+            self.IDLE : {d_down: self.WRUN, a_down: self.WRUN, w_down : self.HRUN , s_down : self.HRUN, w_up: self.HRUN, s_up : self.HRUN, a_up : self.WRUN, d_up : self.WRUN},
+            self.WRUN : {d_up: self.IDLE, a_up: self.IDLE, d_down : self.IDLE, a_down: self.IDLE, w_up : self.WRUN, s_up : self.WRUN, w_down : self.HRUN, s_down : self.HRUN},
+            self.HRUN : {w_up : self.IDLE, s_up : self.IDLE, w_down : self.IDLE, s_down : self.IDLE, a_up : self.HRUN, d_up : self.HRUN, a_down : self.WRUN, d_down : self.WRUN},
 
             }
         )
