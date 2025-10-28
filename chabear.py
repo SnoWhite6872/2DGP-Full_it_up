@@ -1,4 +1,4 @@
-from pico2d import load_image
+from pico2d import load_image, get_events
 from sdl2 import SDL_KEYUP, SDL_KEYDOWN, SDLK_RIGHT, SDLK_LEFT, SDLK_UP, SDLK_DOWN
 from state_machine import StateMachine
 
@@ -62,23 +62,28 @@ class HRun:
     def draw(self):
         self.chabear.image.draw(self.chabear.x, self.chabear.y)
 
-class DRun:
-    def __init__(self, chabear):
-        self.chabear = chabear
-
-    def enter(self,e):
-        if up_down(e) and left_down(e): #대각선 왼위쪽
-            self.chabear.h_dir = 1
-            self.chabear.w_dir = -1
-        elif up_down(e) and right_down(e): #대각선 오위쪽
-            self.chabear.h_dir = 1
-            self.chabear.w_dir = 1
-        elif down_down(e) and left_down(e): #대각선 왼아래쪽
-            self.chabear.h_dir = -1
-            self.chabear.w_dir = -1
-        elif down_down(e) and right_down(e): #대각선 오아래쪽
-            self.chabear.h_dir = -1
-            self.chabear.w_dir = 1
+# class DRun:
+#     def __init__(self, chabear):
+#         self.chabear = chabear
+#
+#     def enter(self,e):
+#         events = get_events()
+#         for event in events:
+#             if event.type == SDL_KEYDOWN:
+#                 if event.key == SDLK_UP:
+#                     if event.key == SDLK_RIGHT:
+#                         self.chabear.h_dir = 1
+#                         self.chabear.w_dir = 1
+#                     elif event.key == SDLK_LEFT:
+#                         self.chabear.h_dir = 1
+#                         self.chabear.w_dir = -1
+#                 elif event.key == SDLK_DOWN:
+#                     if event.key == SDLK_RIGHT:
+#                         self.chabear.h_dir = -1
+#                         self.chabear.w_dir = 1
+#                     elif event.key == SDLK_LEFT:
+#                         self.chabear.h_dir = -1
+#                         self.chabear.w_dir = -1
 
     def exit(self,e):
         pass
@@ -126,8 +131,7 @@ class Chabear:
         {
             self.IDLE : { left_down : self.WRUN, right_down: self.WRUN, left_up: self.WRUN, right_up: self.WRUN, up_down: self.HRUN, down_down: self.HRUN},
             self.WRUN : { left_up : self.IDLE, right_up: self.IDLE, left_down: self.IDLE, right_down: self.IDLE, up_down: self.DRUN, down_down: self.DRUN},
-            self.HRUN : { up_up : self.IDLE, down_up: self.IDLE, up_down: self.IDLE, down_down: self.IDLE, left_down: self.DRUN, right_down: self.DRUN},
-            self.DRUN : { up_up : self.WRUN, down_up : self.WRUN, left_up: self.HRUN, right_up: self.HRUN}
+            self.HRUN : { up_up : self.IDLE, down_up: self.IDLE, up_down: self.IDLE, down_down: self.IDLE},
             }
         )
         pass
