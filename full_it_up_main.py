@@ -51,6 +51,8 @@ def draw():
     game_world.render()
     update_canvas()
 
-running = True
+def finish():
+    game_world.clear()
+    pass
 
 
