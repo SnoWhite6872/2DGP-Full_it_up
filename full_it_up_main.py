@@ -5,6 +5,8 @@ from bgbasic import BGbasic
 from chabear import Chabear
 from chacat import Chacat
 
+import game_framework
+
 
 
 
@@ -15,9 +17,9 @@ def handle_events():
 
     for event in event_list:
         if event.type == SDL_QUIT:
-            running = False
+            game_framework.quit()
         elif event.type == SDL_KEYDOWN and event.key == SDLK_ESCAPE:
-            running = False
+            game_framework.quit()
         else:
             chabear.handle_event(event)
             chacat.handle_event(event)
