@@ -23,7 +23,7 @@ def handle_events():
             chacat.handle_event(event)
     pass
 
-def reset_world():
+def init():
     global chabear
     global chacat
     global bgbasic
@@ -40,24 +40,15 @@ def reset_world():
 
 
 
-def update_world():
+def update():
     game_world.update()
 
 
-def render_world():
+def draw():
     clear_canvas()
     game_world.render()
     update_canvas()
 
 running = True
-open_canvas(504, 1050)
 
-reset_world()
 
-while running:
-    handle_events()
-    update_world()
-    render_world()
-
-    delay(0.01)
-close_canvas()
