@@ -2,12 +2,35 @@ running = None
 stack = None
 
 def change_mode(mode):
+    global stack
+
+    if (len(stack) > 0):  #이전 모드 제거
+        stack[-1].finish()
+        stack.pop()
+
+    stack.append(mode)   #새 모드 실행
+    mode.init()
     pass
 
 def push_mode(mode):
+    global stack
+
+    if (len(stack) > 0):
+        stack[-1].pause()   #이전 모드 일시정지
+
+    stack.append(mode)   #추가한 모드 실행
+    mode.init()
     pass
 
 def pop_mode():
+    global stack
+
+    if (len(stack)> 0):
+        stack[-1].finish()  #실행중인 모드 종료
+        stack.pop()
+
+    if (len(stack) > 0):
+        stack[-1].resume()  #이전 모드 다시 시작
     pass
 
 
