@@ -14,10 +14,20 @@ def render():
         for o in layer:
             o.draw()
 
-def remove_collision_object(o):
+def remove_collision_object(o): #모든 그룹에서 특정 객체 충돌 지우기
+    for object in collision_pair.values():  #딕셔너리 value값 반복
+        if o in object[0]:
+            object[0].remove(o)
+        if o in object[1]:
+            object[1].remove(o)
     pass
 
-def remove_collision_group_in_object(group, o):
+def remove_collision_group_in_object(group, o): #특정 그룹에서 특정 객체 충돌 지우기
+    if group in collision_pair:
+        if o in collision_pair[group][0]:
+            collision_pair[group][0].remove(o)
+        if o in collision_pair[group][1]:
+            collision_pair[group][1].remove(o)
     pass
 
 def remove_object(o):
