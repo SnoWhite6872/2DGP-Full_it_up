@@ -37,8 +37,8 @@ class WRun:
         pass
 
     def do(self):
-        self.chacat.x += self.chacat.w_dir * 3
-        self.chacat.y += self.chacat.h_dir * 3
+        self.chacat.x += self.chacat.w_dir * 1
+        self.chacat.y += self.chacat.h_dir * 1
         pass
 
     def draw(self):
@@ -60,8 +60,8 @@ class HRun:
             pass
 
         def do(self):
-            self.chacat.x += self.chacat.w_dir * 5
-            self.chacat.y += self.chacat.h_dir * 5
+            self.chacat.x += self.chacat.w_dir * 1
+            self.chacat.y += self.chacat.h_dir * 1
             pass
 
         def draw(self):
