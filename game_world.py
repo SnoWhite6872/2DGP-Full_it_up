@@ -14,6 +14,11 @@ def render():
         for o in layer:
             o.draw()
 
+def remove_collision_object(o):
+    pass
+
+def remove_collision_group_in_object(group, o):
+    pass
 
 def remove_object(o):
     for layer in world:
