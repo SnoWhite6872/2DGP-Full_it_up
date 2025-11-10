@@ -36,4 +36,13 @@ def collide(a,b): #충돌 체크 함수 a와 b의 충돌
     if bottom_a > top_b: return False
 
     return True
+collision_pair = {}   #딕셔너리로 충돌 관리,
 
+def add_collision_pair(group, a, b):        #group = 어떤 물체끼리의 작용인지 /
+    if group not in collision_pair:  #없다면 새로 추가
+        collision_pair[group] = [ [], [] ] #튜플속 리스트로 관리
+    if a:
+        collision_pair[group][0].append(a)
+    if b:
+        collision_pair[group][1].append(b)
+    pass
