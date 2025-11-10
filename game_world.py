@@ -46,3 +46,12 @@ def add_collision_pair(group, a, b):        #group = 어떤 물체끼리의 작�
     if b:
         collision_pair[group][1].append(b)
     pass
+
+def handle_collision():
+    for group, pairs in collision_pair.items():
+        for a in pairs[0]:
+            for b in pairs[1]:
+                if collide(a, b):
+                    a.handle_collision(group, b)
+                    b.handle_collision(group, a)
+    return None
