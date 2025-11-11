@@ -102,9 +102,9 @@ class Chabear:
         self.state_machine = StateMachine(
             self.IDLE,               #시작 state
         {
-            self.IDLE : { left_down : self.WRUN, right_down: self.WRUN, left_up: self.WRUN, right_up: self.WRUN, up_down: self.HRUN, down_down: self.HRUN, up_up : self.HRUN, down_up : self.HRUN},
-            self.WRUN : { left_up : self.IDLE, right_up: self.IDLE, left_down: self.IDLE, right_down: self.IDLE, up_down: self.HRUN, down_down: self.HRUN, up_up : self.WRUN, down_up : self.WRUN},
-            self.HRUN : { up_up : self.IDLE, down_up: self.IDLE, up_down: self.IDLE, down_down: self.IDLE, left_down: self.WRUN, right_down: self.WRUN, right_up : self.HRUN, left_up : self.HRUN},
+            self.IDLE : { space_down: self.IDLE ,left_down : self.WRUN, right_down: self.WRUN, left_up: self.WRUN, right_up: self.WRUN, up_down: self.HRUN, down_down: self.HRUN, up_up : self.HRUN, down_up : self.HRUN},
+            self.WRUN : { space_down: self.WRUN ,left_up : self.IDLE, right_up: self.IDLE, left_down: self.IDLE, right_down: self.IDLE, up_down: self.HRUN, down_down: self.HRUN, up_up : self.WRUN, down_up : self.WRUN},
+            self.HRUN : { space_down: self.HRUN ,up_up : self.IDLE, down_up: self.IDLE, up_down: self.IDLE, down_down: self.IDLE, left_down: self.WRUN, right_down: self.WRUN, right_up : self.HRUN, left_up : self.HRUN},
             }
         )
 
