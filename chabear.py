@@ -94,9 +94,31 @@ class Chabear:
             }
         )
 
+        def handle_event(self, event):
+            if event.key in (SDLK_LEFT, SDLK_RIGHT, SDLK_UP, SDLK_DOWN):
+                cur_xdir , cur_ydir = self.x_dir, self.y_dir
+                if event.type == SDL_KEYDOWN:
+                    if event.key == SDLK_RIGHT:
+                        self.x_dir += 1
+                    elif event.key == SDLK_LEFT:
+                        self.x_dir += -1
+                    elif event.key == SDLK_UP:
+                        self.y_dir += 1
+                    elif event.key == SDLK_DOWN:
+                        self.y_dir += -1
+                elif event.type == SDL_KEYUP:
+                    if event.key == SDLK_RIGHT:
+                        self.x_dir += -1
+                    elif event.key == SDLK_LEFT:
+                        self.x_dir += 1
+                    elif event.key == SDLK_UP:
+                        self.y_dir += -1
+                    elif event.key == SDLK_DOWN:
+                        self.y_dir += 1
+
     def draw(self):
-        if event.key in (SDLK_LEFT, SDLK_RIGHT, SDLK_UP, SDLK_DOWN):
-            cur_xdir, cur_ydir = self.w_dir, self.h_dir
+        self.state_machine.draw()
+
 
     def update(self):
         self.state_machine.update()
@@ -104,6 +126,4 @@ class Chabear:
 
 
 
-    def handle_event(self, event):
-        self.state_machine.handle_state_event(('INPUT', event))
 
