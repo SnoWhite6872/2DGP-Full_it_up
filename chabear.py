@@ -1,5 +1,5 @@
 from pico2d import load_image, get_events
-from sdl2 import SDL_KEYUP, SDL_KEYDOWN, SDLK_RIGHT, SDLK_LEFT, SDLK_UP, SDLK_DOWN, SDLK_Q
+from sdl2 import SDL_KEYUP, SDL_KEYDOWN, SDLK_RIGHT, SDLK_LEFT, SDLK_UP, SDLK_DOWN, SDLK_m
 from state_machine import StateMachine
 
 def left_down(e):
@@ -20,8 +20,8 @@ def up_down(e):
 def down_down(e):
     return e[0] == 'INPUT' and e[1].type == SDL_KEYDOWN and e[1].key == SDLK_DOWN
 
-def q_down(e):
-    return e[0] == 'INPUT' and e[1].type == SDL_KEYDOWN and e[1].key == SDLK_SPACE
+def m_down(e):
+    return e[0] == 'INPUT' and e[1].type == SDL_KEYDOWN and e[1].key == SDLK_m
 
 
 
@@ -102,9 +102,9 @@ class Chabear:
         self.state_machine = StateMachine(
             self.IDLE,               #시작 state
         {
-            self.IDLE : { q_down: self.IDLE ,left_down : self.WRUN, right_down: self.WRUN, left_up: self.WRUN, right_up: self.WRUN, up_down: self.HRUN, down_down: self.HRUN, up_up : self.HRUN, down_up : self.HRUN},
-            self.WRUN : { q_down: self.WRUN ,left_up : self.IDLE, right_up: self.IDLE, left_down: self.IDLE, right_down: self.IDLE, up_down: self.HRUN, down_down: self.HRUN, up_up : self.WRUN, down_up : self.WRUN},
-            self.HRUN : { q_down: self.HRUN ,up_up : self.IDLE, down_up: self.IDLE, up_down: self.IDLE, down_down: self.IDLE, left_down: self.WRUN, right_down: self.WRUN, right_up : self.HRUN, left_up : self.HRUN},
+            self.IDLE : { m_down: self.IDLE ,left_down : self.WRUN, right_down: self.WRUN, left_up: self.WRUN, right_up: self.WRUN, up_down: self.HRUN, down_down: self.HRUN, up_up : self.HRUN, down_up : self.HRUN},
+            self.WRUN : { m_down: self.WRUN ,left_up : self.IDLE, right_up: self.IDLE, left_down: self.IDLE, right_down: self.IDLE, up_down: self.HRUN, down_down: self.HRUN, up_up : self.WRUN, down_up : self.WRUN},
+            self.HRUN : { m_down: self.HRUN ,up_up : self.IDLE, down_up: self.IDLE, up_down: self.IDLE, down_down: self.IDLE, left_down: self.WRUN, right_down: self.WRUN, right_up : self.HRUN, left_up : self.HRUN},
             }
         )
 
