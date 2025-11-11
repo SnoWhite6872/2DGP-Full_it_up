@@ -120,13 +120,15 @@ class Chacat:
         self.WRUN = WRun(self)
         self.HRUN = HRun(self)
         self.IDLE = Idle(self)
+        self.WATTACK = WAttack(self)
 
         self.state_machine = StateMachine(
             self.IDLE,
         {
-            self.IDLE : {d_down: self.WRUN, a_down: self.WRUN, w_down : self.HRUN , s_down : self.HRUN, w_up: self.HRUN, s_up : self.HRUN, a_up : self.WRUN, d_up : self.WRUN},
-            self.WRUN : {d_up: self.IDLE, a_up: self.IDLE, d_down : self.IDLE, a_down: self.IDLE, w_up : self.WRUN, s_up : self.WRUN, w_down : self.HRUN, s_down : self.HRUN},
-            self.HRUN : {w_up : self.IDLE, s_up : self.IDLE, w_down : self.IDLE, s_down : self.IDLE, a_up : self.HRUN, d_up : self.HRUN, a_down : self.WRUN, d_down : self.WRUN},
+            self.IDLE : {q_down: self.WATTACK ,d_down: self.WRUN, a_down: self.WRUN, w_down : self.HRUN , s_down : self.HRUN, w_up: self.HRUN, s_up : self.HRUN, a_up : self.WRUN, d_up : self.WRUN},
+            self.WRUN : {q_down: self.WATTACK, d_up: self.IDLE, a_up: self.IDLE, d_down : self.IDLE, a_down: self.IDLE, w_up : self.WRUN, s_up : self.WRUN, w_down : self.HRUN, s_down : self.HRUN},
+            self.HRUN : {q_down: self.WATTACK ,w_up : self.IDLE, s_up : self.IDLE, w_down : self.IDLE, s_down : self.IDLE, a_up : self.HRUN, d_up : self.HRUN, a_down : self.WRUN, d_down : self.WRUN},
+            self.WATTACK : {}
 
             }
         )
