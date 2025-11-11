@@ -2,60 +2,45 @@ from pico2d import load_image, get_events
 from sdl2 import SDL_KEYUP, SDL_KEYDOWN, SDLK_RIGHT, SDLK_LEFT, SDLK_UP, SDLK_DOWN, SDLK_m
 from state_machine import StateMachine
 
-def left_down(e):
-    return e[0] == 'INPUT' and e[1].type == SDL_KEYDOWN and e[1].key == SDLK_LEFT
-def right_down(e):
-    return e[0] == 'INPUT' and e[1].type == SDL_KEYDOWN and e[1].key == SDLK_RIGHT
-def up_up(e):
-    return e[0] == 'INPUT' and e[1].type == SDL_KEYUP and e[1].key == SDLK_UP
-def down_up(e):
-    return e[0] == 'INPUT' and e[1].type == SDL_KEYUP and e[1].key == SDLK_DOWN
+def event_stop(e):
+    return e[0] == 'STOP'
 
-def left_up(e):
-    return e[0] == 'INPUT' and e[1].type == SDL_KEYUP and e[1].key == SDLK_LEFT
-def right_up(e):
-    return e[0] == 'INPUT' and e[1].type == SDL_KEYUP and e[1].key == SDLK_RIGHT
-def up_down(e):
-    return e[0] == 'INPUT' and e[1].type == SDL_KEYDOWN and e[1].key == SDLK_UP
-def down_down(e):
-    return e[0] == 'INPUT' and e[1].type == SDL_KEYDOWN and e[1].key == SDLK_DOWN
+def event_run(e):
+    return e[0] == 'RUN'
 
 def m_down(e):
     return e[0] == 'INPUT' and e[1].type == SDL_KEYDOWN and e[1].key == SDLK_m
 
 
 
-class WRun:
-    def __init__(self, chabear):
-        self.chabear = chabear
-    def enter(self,e):
-        if right_down(e) or left_up(e):
-            self.chabear.w_dir = 1  #오른쪽 이동
-        elif left_down(e) or right_up(e):
-            self.chabear.w_dir = -1
-        elif up_up(e) or down_up(e):
-            self.chabear.h_dir = 0
-
-    def exit(self,e):
-        pass
-    def do(self):
-        self.chabear.x += self.chabear.w_dir * 1
-        self.chabear.y += self.chabear.h_dir * 1
-        pass
-    def draw(self):
-        self.chabear.image.draw(self.chabear.x, self.chabear.y)
+# class WRun:
+#     def __init__(self, chabear):
+#         self.chabear = chabear
+#     def enter(self,e):
+#         if right_down(e) or left_up(e):
+#             self.chabear.w_dir = 1  #오른쪽 이동
+#         elif left_down(e) or right_up(e):
+#             self.chabear.w_dir = -1
+#         elif up_up(e) or down_up(e):
+#             self.chabear.h_dir = 0
+#
+#     def exit(self,e):
+#         pass
+#     def do(self):
+#         self.chabear.x += self.chabear.w_dir * 1
+#         self.chabear.y += self.chabear.h_dir * 1
+#         pass
+#     def draw(self):
+#         self.chabear.image.draw(self.chabear.x, self.chabear.y)
 
 class HRun:
     def __init__(self, chabear):
         self.chabear = chabear
 
     def enter(self,e):
-        if up_down(e) or down_up(e):
-            self.chabear.h_dir = 1
-        elif down_down(e) or up_up(e):
-            self.chabear.h_dir = -1
-        elif right_up(e) or left_up(e):
-            self.chabear.w_dir = 0
+        if self.chabear.w_dir != 0:                   #가로 방향이 0이 아니면 가로 방향은 시선 방향과 같다.
+            self.chabear.f_dir = self.chabear.w_dir
+
 
     def exit(self,e):
         pass
@@ -93,6 +78,7 @@ class Chabear:
         self.x, self.y = 100, 200
         self.w_dir = 0
         self.h_dir = 0
+        self.f_dir = 1
 
         self.WRUN = WRun(self)
         self.HRUN = HRun(self)
@@ -108,13 +94,15 @@ class Chabear:
             }
         )
 
+    def draw(self):
+        if event.key in (SDLK_LEFT, SDLK_RIGHT, SDLK_UP, SDLK_DOWN):
+            cur_xdir, cur_ydir = self.w_dir, self.h_dir
 
     def update(self):
         self.state_machine.update()
 
 
-    def draw(self):
-        self.state_machine.draw()
+
 
     def handle_event(self, event):
         self.state_machine.handle_state_event(('INPUT', event))
