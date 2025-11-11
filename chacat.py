@@ -31,7 +31,7 @@ class WAttack:
 
     def enter(self,e):
         if q_down(e):
-            pass
+            print("1P 공격")
 
     def exit(self,e):
         pass
@@ -40,6 +40,7 @@ class WAttack:
         pass
 
     def draw(self):
+        self.chacat.image.draw(self.chacat.x, self.chacat.y)
         pass
 
 

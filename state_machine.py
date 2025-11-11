@@ -1,9 +1,10 @@
 from event_to_string import event_to_string
-
+from sdl2 import SDLK_q, SDL_KEYDOWN
 class StateMachine:
     def __init__(self, start_state, rules):
         self.cur_state = start_state
         self.rules = rules
+        self.prev_state = None
         self.cur_state.enter(('start', 0))
 
     def update(self):
@@ -13,6 +14,8 @@ class StateMachine:
         self.cur_state.draw()
 
     def handle_state_event(self, state_event):
+        if state_event[1] == SDLK_q:
+            pass
         for check_event in self.rules[self.cur_state].keys():
             if check_event(state_event):
                 self.next_state = self.rules[self.cur_state][check_event]
