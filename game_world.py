@@ -2,8 +2,8 @@
 
 world = [[],[]]
 
-def add_object(o, l = 0):
-    world[l].append(o)
+def add_object(o, d = 0):
+    world[d].append(o)
 
 def update():
     for layer in world:
