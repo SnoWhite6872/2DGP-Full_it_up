@@ -3,69 +3,35 @@ from sdl2 import SDL_KEYDOWN, SDL_KEYUP, SDLK_w, SDLK_a, SDLK_s, SDLK_d, SDLK_q
 from state_machine import StateMachine
 
 
-def a_down(e):
-    return e[0] == 'INPUT' and e[1].type == SDL_KEYDOWN and e[1].key == SDLK_a
-def d_down(e):
-    return e[0] == 'INPUT' and e[1].type == SDL_KEYDOWN and e[1].key == SDLK_d
-def w_down(e):
-    return e[0] == 'INPUT' and e[1].type == SDL_KEYDOWN and e[1].key == SDLK_w
-def s_down(e):
-    return e[0] == 'INPUT' and e[1].type == SDL_KEYDOWN and e[1].key == SDLK_s
+def event_stop(e):
+    return e[0] == 'STOP'
 
-def a_up(e):
-    return e[0] == 'INPUT' and e[1].type == SDL_KEYUP and e[1].key == SDLK_a
-def d_up(e):
-    return e[0] == 'INPUT' and e[1].type == SDL_KEYUP and e[1].key == SDLK_d
-def w_up(e):
-    return e[0] == 'INPUT' and e[1].type == SDL_KEYUP and e[1].key == SDLK_w
-def s_up(e):
-    return e[0] == 'INPUT' and e[1].type == SDL_KEYUP and e[1].key == SDLK_s
+def event_run(e):
+    return e[0] == 'RUN'
 
 def q_down(e):
     return e[0] == 'INPUT' and e[1].type == SDL_KEYDOWN and e[1].key == SDLK_q #1p 약공격
 
 
-class WAttack:
-    def __init__(self, chacat):
-        self.chacat = chacat
+# class WAttack:
+#     def __init__(self, chacat):
+#         self.chacat = chacat
+#
+#     def enter(self,e):
+#         if q_down(e):
+#             print("1P 공격")
+#
+#     def exit(self,e):
+#         pass
+#
+#     def do(self):
+#         pass
+#
+#     def draw(self):
+#         self.chacat.image.draw(self.chacat.x, self.chacat.y)
+#         pass
 
-    def enter(self,e):
-        if q_down(e):
-            print("1P 공격")
 
-    def exit(self,e):
-        pass
-
-    def do(self):
-        pass
-
-    def draw(self):
-        self.chacat.image.draw(self.chacat.x, self.chacat.y)
-        pass
-
-
-class WRun:
-    def __init__(self, chacat):
-        self.chacat = chacat
-
-    def enter(self,e):
-        if d_down(e) or a_up(e):
-            self.chacat.w_dir = 1  #오른쪽 이동
-        elif a_down(e) or d_up(e):
-            self.chacat.w_dir = -1
-        elif w_up(e) or s_up(e):
-            self.chacat.h_dir = 0
-
-    def exit(self,e):
-        pass
-
-    def do(self):
-        self.chacat.x += self.chacat.w_dir * 1
-        self.chacat.y += self.chacat.h_dir * 1
-        pass
-
-    def draw(self):
-        self.chacat.image.draw(self.chacat.x, self.chacat.y)
 
 class HRun:
         def __init__(self, chacat):

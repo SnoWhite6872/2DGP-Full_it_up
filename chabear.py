@@ -15,26 +15,6 @@ def m_down(e):
 
 
 
-# class WRun:
-#     def __init__(self, chabear):
-#         self.chabear = chabear
-#     def enter(self,e):
-#         if right_down(e) or left_up(e):
-#             self.chabear.w_dir = 1  #오른쪽 이동
-#         elif left_down(e) or right_up(e):
-#             self.chabear.w_dir = -1
-#         elif up_up(e) or down_up(e):
-#             self.chabear.h_dir = 0
-#
-#     def exit(self,e):
-#         pass
-#     def do(self):
-#         self.chabear.x += self.chabear.w_dir * 1
-#         self.chabear.y += self.chabear.h_dir * 1
-#         pass
-#     def draw(self):
-#         self.chabear.image.draw(self.chabear.x, self.chabear.y)
-
 class Run:
     def __init__(self, chabear):
         self.chabear = chabear
