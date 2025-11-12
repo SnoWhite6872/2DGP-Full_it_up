@@ -16,10 +16,12 @@ def q_down(e):
 class WAttack:
         def __init__(self, chacat):
             self.chacat = chacat
+            self.timer = 0
 
         def enter(self,e):
             if q_down(e):
                 print("1P 공격")
+            self.timer = 30
 
         def exit(self,e):
             pass
@@ -27,6 +29,9 @@ class WAttack:
         def do(self):
             self.chacat.x += self.chacat.x_dir * 1
             self.chacat.y += self.chacat.y_dir * 1
+            self.timer -= 1
+            if self.timer <= 0:
+                self.chacat.state_machine.handle_state_event(('RUN', 0))
 
         def draw(self):
             self.chacat.image.draw(self.chacat.x, self.chacat.y)
