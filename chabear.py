@@ -13,7 +13,29 @@ def event_run(e):
 def m_down(e):
     return e[0] == 'INPUT' and e[1].type == SDL_KEYDOWN and e[1].key == SDLK_m
 
+class WAttack:
+        def __init__(self, chabear):
+            self.chabear = chabear
+            self.timer = 0
 
+        def enter(self, e):
+            if m_down(e):
+                print("1P 공격")
+            self.timer = 30
+
+        def exit(self, e):
+            pass
+
+        def do(self):
+            self.chabear.x += self.chabear.x_dir * 1
+            self.chabear.y += self.chabear.y_dir * 1
+            self.timer -= 1
+            if self.timer <= 0:
+                self.chabear.state_machine.handle_state_event(('RUN', 0))
+
+        def draw(self):
+            self.chabear.image.draw(self.chabear.x, self.chabear.y)
+            pass
 
 class Run:
     def __init__(self, chabear):
@@ -62,17 +84,18 @@ class Chabear:
         self.y_dir = 0
         self.f_dir = 1
 
-        #self.WRUN = WRun(self)
+
         self.RUN = Run(self)
-        # self.DRUN = DRun(self)
         self.IDLE = Idle(self)
+        self.WATTACK = WAttack(self)
 
         self.state_machine = StateMachine(
             self.IDLE,               #시작 state
         {
 
                 self.IDLE: { event_run: self.RUN},
-                self.RUN: {event_stop: self.IDLE}
+                self.RUN: {event_stop: self.IDLE},
+                self.WATTACK : {event_stop: self.IDLE, event_run: self.RUN}
             }
         )
     def update(self):
