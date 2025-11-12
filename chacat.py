@@ -33,24 +33,20 @@ def q_down(e):
 
 
 
-class HRun:
+class Run:
         def __init__(self, chacat):
             self.chacat = chacat
 
         def enter(self,e):
-            if w_down(e) or s_up(e):
-                self.chacat.h_dir = 1
-            elif s_down(e) or w_up(e):
-                self.chacat.h_dir = -1
-            elif a_up(e) or d_up(e):
-                self.chacat.w_dir = 0
+            if self.chacat.x_dir != 0:
+                self.chacat.f_dir = self.chacat.x_dir
 
         def exit(self,e):
             pass
 
         def do(self):
-            self.chacat.x += self.chacat.w_dir * 1
-            self.chacat.y += self.chacat.h_dir * 1
+            self.chacat.x += self.chacat.x_dir * 1
+            self.chacat.y += self.chacat.y_dir * 1
             pass
 
         def draw(self):
@@ -81,21 +77,19 @@ class Chacat:
     def __init__(self):
         self.image = load_image('Cha_cat.png')
         self.x, self.y = 200, 400
-        self.w_dir = 0
-        self.h_dir = 0
+        self.x_dir = 0
+        self.y_dir = 0
+        self.f_dir = 1
 
-        self.WRUN = WRun(self)
-        self.HRUN = HRun(self)
+        self.RUN = Run(self)
         self.IDLE = Idle(self)
-        self.WATTACK = WAttack(self)
+        #self.WATTACK = WAttack(self)
 
         self.state_machine = StateMachine(
             self.IDLE,
         {
-            self.IDLE : {q_down: self.WATTACK ,d_down: self.WRUN, a_down: self.WRUN, w_down : self.HRUN , s_down : self.HRUN, w_up: self.HRUN, s_up : self.HRUN, a_up : self.WRUN, d_up : self.WRUN},
-            self.WRUN : {q_down: self.WATTACK, d_up: self.IDLE, a_up: self.IDLE, d_down : self.IDLE, a_down: self.IDLE, w_up : self.WRUN, s_up : self.WRUN, w_down : self.HRUN, s_down : self.HRUN},
-            self.HRUN : {q_down: self.WATTACK ,w_up : self.IDLE, s_up : self.IDLE, w_down : self.IDLE, s_down : self.IDLE, a_up : self.HRUN, d_up : self.HRUN, a_down : self.WRUN, d_down : self.WRUN},
-            self.WATTACK : {}
+            self.IDLE: {event_run : self.RUN},
+            self.RUN: {event_stop : self.IDLE},
 
             }
         )
@@ -111,5 +105,30 @@ class Chacat:
         pass
 
     def handle_event(self, event):
-        self.state_machine.handle_state_event(('INPUT', event))
-        pass
+        if event.key in (SDLK_a, SDLK_d, SDLK_w, SDLK_s):
+            cur_xdir , cur_ydir = self.x_dir, self.y_dir
+            if event.type == SDL_KEYDOWN:
+                if event.key == SDLK_d:
+                        self.x_dir += 1
+                elif event.key == SDLK_a:
+                        self.x_dir += -1
+                elif event.key == SDLK_w:
+                        self.y_dir += 1
+                elif event.key == SDLK_s:
+                        self.y_dir += -1
+            elif event.type == SDL_KEYUP:
+                if event.key == SDLK_d:
+                    self.x_dir += -1
+                elif event.key == SDLK_a:
+                    self.x_dir += 1
+                elif event.key == SDLK_w:
+                    self.y_dir += -1
+                elif event.key == SDLK_s:
+                    self.y_dir += 1
+            if cur_xdir != self.x_dir or cur_ydir != self.y_dir:
+                if self.x_dir == 0 and self.y_dir == 0:
+                        self.state_machine.handle_state_event(('STOP', self.f_dir))
+                else:
+                        self.state_machine.handle_state_event(('RUN', None))
+        else:
+            self.state_machine.handle_state_event(('INPUT', event))
