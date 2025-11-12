@@ -1,4 +1,4 @@
-from pico2d import load_image, get_events
+from pico2d import *
 from sdl2 import SDL_KEYUP, SDL_KEYDOWN, SDLK_RIGHT, SDLK_LEFT, SDLK_UP, SDLK_DOWN, SDLK_m
 from state_machine import StateMachine
 
@@ -132,8 +132,10 @@ class Chabear:
 
     def draw(self):
         self.state_machine.draw()
+        draw_rectangle(*self.get_bb())
 
-
+    def get_bb(self):
+        return self.x - 35, self.y - 60, self.x + 35, self.y + 40
 
 
 

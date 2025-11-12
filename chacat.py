@@ -1,4 +1,4 @@
-from pico2d import load_image
+from pico2d import *
 from sdl2 import SDL_KEYDOWN, SDL_KEYUP, SDLK_w, SDLK_a, SDLK_s, SDLK_d, SDLK_q
 from state_machine import StateMachine
 
@@ -109,6 +109,7 @@ class Chacat:
 
     def draw(self):
         self.state_machine.draw()
+        draw_rectangle(*self.get_bb())
         pass
 
     def handle_event(self, event):
@@ -139,3 +140,8 @@ class Chacat:
                         self.state_machine.handle_state_event(('RUN', None))
         else:
             self.state_machine.handle_state_event(('INPUT', event))
+
+
+
+    def get_bb(self):
+        return self.x - 35, self.y - 60, self.x + 35, self.y + 40
