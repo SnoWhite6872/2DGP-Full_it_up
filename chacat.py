@@ -13,23 +13,24 @@ def q_down(e):
     return e[0] == 'INPUT' and e[1].type == SDL_KEYDOWN and e[1].key == SDLK_q #1p 약공격
 
 
-# class WAttack:
-#     def __init__(self, chacat):
-#         self.chacat = chacat
-#
-#     def enter(self,e):
-#         if q_down(e):
-#             print("1P 공격")
-#
-#     def exit(self,e):
-#         pass
-#
-#     def do(self):
-#         pass
-#
-#     def draw(self):
-#         self.chacat.image.draw(self.chacat.x, self.chacat.y)
-#         pass
+class WAttack:
+        def __init__(self, chacat):
+            self.chacat = chacat
+
+        def enter(self,e):
+            if q_down(e):
+                print("1P 공격")
+
+        def exit(self,e):
+            pass
+
+        def do(self):
+            self.chacat.x += self.chacat.x_dir * 1
+            self.chacat.y += self.chacat.y_dir * 1
+
+        def draw(self):
+            self.chacat.image.draw(self.chacat.x, self.chacat.y)
+            pass
 
 
 
@@ -83,13 +84,14 @@ class Chacat:
 
         self.RUN = Run(self)
         self.IDLE = Idle(self)
-        #self.WATTACK = WAttack(self)
+        self.WATTACK = WAttack(self)
 
         self.state_machine = StateMachine(
             self.IDLE,
         {
-            self.IDLE: {event_run : self.RUN},
-            self.RUN: {event_stop : self.IDLE},
+            self.IDLE: {q_down: self.WATTACK, event_run : self.RUN},
+            self.RUN: {q_down: self.WATTACK, event_stop : self.IDLE},
+            self.WATTACK : {event_run: self.RUN, event_stop: self.IDLE},
 
             }
         )

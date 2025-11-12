@@ -22,6 +22,7 @@ class StateMachine:
                     self.next_state.exit(state_event)
                     self.cur_state.enter(state_event)
                     print(f'{self.cur_state.__class__.__name__} -----------{event_to_string(state_event)}----------> {self.cur_state.__class__.__name__}')
+                    return
 
 
 
