@@ -20,7 +20,7 @@ class WAttack:
 
         def enter(self, e):
             if m_down(e):
-                print("1P 공격")
+                print("2P 공격")
             self.timer = 30
 
         def exit(self, e):
@@ -42,8 +42,8 @@ class Run:
         self.chabear = chabear
 
     def enter(self,e):
-        if self.chabear.w_dir != 0:                   #가로 방향이 0이 아니면 가로 방향은 시선 방향과 같다.
-            self.chabear.f_dir = self.chabear.w_dir
+        if self.chabear.x_dir != 0:                   #가로 방향이 0이 아니면 가로 방향은 시선 방향과 같다.
+            self.chabear.f_dir = self.chabear.y_dir
 
 
     def exit(self,e):
@@ -93,8 +93,8 @@ class Chabear:
             self.IDLE,               #시작 state
         {
 
-                self.IDLE: { event_run: self.RUN},
-                self.RUN: {event_stop: self.IDLE},
+                self.IDLE: { m_down: self.WATTACK,event_run: self.RUN},
+                self.RUN: {m_down: self.WATTACK,event_stop: self.IDLE},
                 self.WATTACK : {event_stop: self.IDLE, event_run: self.RUN}
             }
         )

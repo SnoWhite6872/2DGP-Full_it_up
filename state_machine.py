@@ -1,5 +1,5 @@
 from event_to_string import event_to_string
-from sdl2 import SDLK_q, SDL_KEYDOWN
+from sdl2 import SDLK_q, SDLK_m ,SDL_KEYDOWN
 class StateMachine:
     def __init__(self, start_state, rules):
         self.cur_state = start_state
@@ -13,7 +13,7 @@ class StateMachine:
         self.cur_state.draw()
 
     def handle_state_event(self, state_event):
-        if state_event[1] == SDLK_q:
+        if state_event[1] == SDLK_q or state_event[1] == SDLK_m:
             for check_event in self.rules[self.cur_state].keys():
                 if check_event(state_event):
                     self.next_state = self.rules[self.cur_state][check_event]
