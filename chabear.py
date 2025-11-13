@@ -1,10 +1,11 @@
 from pico2d import *
 from sdl2 import SDL_KEYUP, SDL_KEYDOWN, SDLK_RIGHT, SDLK_LEFT, SDLK_UP, SDLK_DOWN, SDLK_m
 from state_machine import StateMachine
+import game_framework
 
 
 PIXEL_PER_METER = (1.0 / 0.03)  # 10픽셀 30센치미터
-RUN_SPEED_KMPH = 20.0  # 시속 20킬로미터
+RUN_SPEED_KMPH = 5.0  # 시속 20킬로미터
 RUN_SPEED_MPM = (RUN_SPEED_KMPH * 1000.0 / 60.0) # 분속
 RUN_SPEED_MPS = (RUN_SPEED_MPM / 60.0)        # 초속
 RUN_SPEED_PPS = (RUN_SPEED_MPS * PIXEL_PER_METER)  #달리기 픽셀 속도
@@ -34,8 +35,8 @@ class WAttack:
             pass
 
         def do(self):
-            self.chabear.x += self.chabear.x_dir * 1
-            self.chabear.y += self.chabear.y_dir * 1
+            self.chabear.x += self.chabear.x_dir * RUN_SPEED_PPS
+            self.chabear.y += self.chabear.y_dir * RUN_SPEED_PPS
             self.timer -= 1
             if self.timer <= 0:
                 self.chabear.state_machine.handle_state_event(('RUN', 0))
@@ -57,8 +58,8 @@ class Run:
         pass
 
     def do(self):
-        self.chabear.x += self.chabear.x_dir * 1
-        self.chabear.y += self.chabear.y_dir * 1
+        self.chabear.x += self.chabear.x_dir * RUN_SPEED_PPS
+        self.chabear.y += self.chabear.y_dir * RUN_SPEED_PPS * game_framework.frame_time
         pass
 
     def draw(self):

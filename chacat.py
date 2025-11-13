@@ -12,6 +12,11 @@ def event_run(e):
 def q_down(e):
     return e[0] == 'INPUT' and e[1].type == SDL_KEYDOWN and e[1].key == SDLK_q #1p 약공격
 
+PIXEL_PER_METER = (1.0 / 0.03)  # 10픽셀 30센치미터
+RUN_SPEED_KMPH = 5.0  # 시속 20킬로미터
+RUN_SPEED_MPM = (RUN_SPEED_KMPH * 1000.0 / 60.0) # 분속
+RUN_SPEED_MPS = (RUN_SPEED_MPM / 60.0)        # 초속
+RUN_SPEED_PPS = (RUN_SPEED_MPS * PIXEL_PER_METER)  #달리기 픽셀 속도
 
 class WAttack:
         def __init__(self, chacat):
@@ -27,8 +32,8 @@ class WAttack:
             pass
 
         def do(self):
-            self.chacat.x += self.chacat.x_dir * 1
-            self.chacat.y += self.chacat.y_dir * 1
+            self.chacat.x += self.chacat.x_dir * RUN_SPEED_PPS
+            self.chacat.y += self.chacat.y_dir * RUN_SPEED_PPS
             self.timer -= 1
             if self.timer <= 0:
                 self.chacat.state_machine.handle_state_event(('RUN', 0))
@@ -51,8 +56,8 @@ class Run:
             pass
 
         def do(self):
-            self.chacat.x += self.chacat.x_dir * 1
-            self.chacat.y += self.chacat.y_dir * 1
+            self.chacat.x += self.chacat.x_dir * RUN_SPEED_PPS
+            self.chacat.y += self.chacat.y_dir * RUN_SPEED_PPS
             pass
 
         def draw(self):
