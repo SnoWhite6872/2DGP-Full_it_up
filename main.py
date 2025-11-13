@@ -1,6 +1,6 @@
 from pico2d import *
 import game_framework
-import full_it_up_main as start_mode  #처음 시작할 모드 정하기
+import title_mode as start_mode  #처음 시작할 모드 정하기
 
 
 open_canvas(1480, 1050)
