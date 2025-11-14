@@ -6,12 +6,16 @@ import game_data
 image0 = None
 image1 = None
 image2 = None
+cc = None
+cb = None
 
 def init():
-    global map, image0, image1
+    global map, image0, image1, cc, cb
     map = 0
     image0 = load_image('BG_basic.png')
     image1 = load_image('BG_luxury.png')
+    cc = load_image('Cha_cat.png')
+    cb = load_image('Cha_bear.png')
     pass
 
 def finish():
