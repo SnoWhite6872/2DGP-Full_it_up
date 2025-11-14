@@ -50,7 +50,7 @@ def draw():
     pass
 
 def handle_events():
-    global map
+    global map, player1, player2
     event_list = get_events()  # 버퍼로부터 모든 입력을 갖고 온다.
     for event in event_list:
         if event.type == SDL_QUIT:
@@ -59,7 +59,14 @@ def handle_events():
             game_framework.quit()
         elif event.type == SDL_KEYDOWN and event.key == SDLK_SPACE:
             game_data.select_mod = map
+            game_data.player_1 = player1
+            game_data.player_2 = player2
             game_framework.change_mode(full_it_up_main)
         elif event.type == SDL_MOUSEBUTTONDOWN:
             map = (map + 1 ) % 2
+        elif event.type == SDL_KEYDOWN and event.key == SDLK_d:
+            player1 = (player1 + 1) % 2
+        elif event.type == SDL_KEYDOWN and event.key == SDLK_RIGHT:
+            player2 = (player2 + 1) % 2
+
     pass
