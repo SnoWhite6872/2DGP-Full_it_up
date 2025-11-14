@@ -4,6 +4,8 @@ import game_world
 from bgbasic import BGbasic
 from chabear import Chabear
 from chacat import Chacat
+from bgluxury import BGluxury
+import game_data
 
 import game_framework
 
@@ -31,7 +33,11 @@ def init():
     global bgbasic
 
     bgbasic = BGbasic()
-    game_world.add_object(bgbasic, 0)
+    bgluxury = BGluxury()
+    if game_data.select_mod == 0:
+        game_world.add_object(bgbasic, 0)
+    elif game_data.select_mod == 1:
+        game_world.add_object(bgluxury, 0)
     chabear = Chabear()
     game_world.add_object(chabear, 1)
     chacat = Chacat()

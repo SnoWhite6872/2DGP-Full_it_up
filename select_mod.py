@@ -1,6 +1,7 @@
 from pico2d import *
 import game_framework
 import full_it_up_main
+import game_data
 
 image0 = None
 image1 = None
@@ -40,6 +41,7 @@ def handle_events():
         elif event.type == SDL_KEYDOWN and event.key == SDLK_ESCAPE:
             game_framework.quit()
         elif event.type == SDL_KEYDOWN and event.key == SDLK_SPACE:
+            game_data.select_mod = map
             game_framework.change_mode(full_it_up_main)
         elif event.type == SDL_MOUSEBUTTONDOWN:
             map = (map + 1 ) % 2
