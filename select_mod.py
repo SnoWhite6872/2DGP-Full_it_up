@@ -24,4 +24,14 @@ def draw():
     pass
 
 def handle_events():
+    event_list = get_events()  # 버퍼로부터 모든 입력을 갖고 온다.
+    for event in event_list:
+        if event.type == SDL_QUIT:
+            game_framework.quit()
+        elif event.type == SDL_KEYDOWN and event.key == SDLK_ESCAPE:
+            game_framework.quit()
+        elif event.type == SDL_KEYDOWN and event.key == SDLK_SPACE:
+            game_framework.change_mode(full_it_up_main)
+        elif event.type == SDL_MOUSEMOTION:
+            pass
     pass
