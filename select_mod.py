@@ -7,7 +7,8 @@ image1 = None
 image2 = None
 
 def init():
-    global image0, image1
+    global map, image0, image1
+    map = 0
     image0 = load_image('BG_basic.png')
     image1 = load_image('BG_luxury.png')
     pass
@@ -21,9 +22,17 @@ def update():
     pass
 
 def draw():
+    global map
+    clear_canvas()
+    if map == 0:
+        image0.draw(1480//2, 1050//2)
+    elif map == 1:
+        image1.draw(1480//2, 1050//2)
+    update_canvas()
     pass
 
 def handle_events():
+    global map
     event_list = get_events()  # 버퍼로부터 모든 입력을 갖고 온다.
     for event in event_list:
         if event.type == SDL_QUIT:
@@ -32,6 +41,6 @@ def handle_events():
             game_framework.quit()
         elif event.type == SDL_KEYDOWN and event.key == SDLK_SPACE:
             game_framework.change_mode(full_it_up_main)
-        elif event.type == SDL_MOUSEMOTION:
-            pass
+        elif event.type == SDL_MOUSEBUTTONDOWN:
+            map = (map + 1 ) % 2
     pass
