@@ -10,7 +10,9 @@ cc = None
 cb = None
 
 def init():
-    global map, image0, image1, cc, cb
+    global map, image0, image1, cc, cb, player1, player2
+    player1 = 0
+    player2 = 0
     map = 0
     image0 = load_image('BG_basic.png')
     image1 = load_image('BG_luxury.png')
@@ -19,20 +21,31 @@ def init():
     pass
 
 def finish():
-    global image0, image1
-    del image0, image1
+    global image0, image1, cc, cb
+    del image0, image1, cc, cb
     pass
 
 def update():
     pass
 
 def draw():
-    global map
+    global map, player1, player2
     clear_canvas()
     if map == 0:
         image0.draw(1480//2, 1050//2)
     elif map == 1:
         image1.draw(1480//2, 1050//2)
+
+    if player1 == 0:
+        cc.draw(100, 700)
+    elif player1 == 1:
+        cb.draw(100, 700)
+
+    if player2 == 0:
+        cc.draw(1380, 700)
+    elif player2 == 1:
+        cb.draw(1380, 700)
+
     update_canvas()
     pass
 
