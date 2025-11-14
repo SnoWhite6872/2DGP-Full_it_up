@@ -60,11 +60,6 @@ def handle_events():
         elif event.type == SDL_KEYDOWN:
             if event.key == SDLK_ESCAPE:
                 game_framework.quit()
-            if event.key == SDLK_SPACE:
-                game_data.select_mod = map
-                game_data.player_1 = player1
-                game_data.player_2 = player2
-                game_framework.change_mode(full_it_up_main)
             if event.key == SDLK_d:
                 player1 = (player1 + 1) % 2
             if event.key == SDLK_a:
@@ -79,5 +74,10 @@ def handle_events():
                     player2 = 1
                 else:
                     player2 = (player2 - 1) % 2
+            if event.key == SDLK_SPACE:
+                game_data.select_mod = map
+                game_data.player_1 = player1
+                game_data.player_2 = player2
+                game_framework.change_mode(full_it_up_main)
 
     pass
