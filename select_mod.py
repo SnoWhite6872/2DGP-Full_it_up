@@ -66,7 +66,17 @@ def handle_events():
             map = (map + 1 ) % 2
         elif event.type == SDL_KEYDOWN and event.key == SDLK_d:
             player1 = (player1 + 1) % 2
+        elif event.type == SDL_KEYDOWN and event.key == SDLK_a:
+            if player1 == 0:
+                player1 = 1
+            else:
+                player1 = (player1 - 1) % 2
         elif event.type == SDL_KEYDOWN and event.key == SDLK_RIGHT:
             player2 = (player2 + 1) % 2
+        elif event.type == SDL_KEYDOWN and event.key == SDLK_LEFT:
+            if player2 == 0:
+                player2 = 1
+            else:
+                player2 = (player2 - 1) % 2
 
     pass
