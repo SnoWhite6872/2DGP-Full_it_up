@@ -55,28 +55,29 @@ def handle_events():
     for event in event_list:
         if event.type == SDL_QUIT:
             game_framework.quit()
-        elif event.type == SDL_KEYDOWN and event.key == SDLK_ESCAPE:
-            game_framework.quit()
-        elif event.type == SDL_KEYDOWN and event.key == SDLK_SPACE:
-            game_data.select_mod = map
-            game_data.player_1 = player1
-            game_data.player_2 = player2
-            game_framework.change_mode(full_it_up_main)
         elif event.type == SDL_MOUSEBUTTONDOWN:
             map = (map + 1 ) % 2
-        elif event.type == SDL_KEYDOWN and event.key == SDLK_d:
-            player1 = (player1 + 1) % 2
-        elif event.type == SDL_KEYDOWN and event.key == SDLK_a:
-            if player1 == 0:
-                player1 = 1
-            else:
-                player1 = (player1 - 1) % 2
-        elif event.type == SDL_KEYDOWN and event.key == SDLK_RIGHT:
-            player2 = (player2 + 1) % 2
-        elif event.type == SDL_KEYDOWN and event.key == SDLK_LEFT:
-            if player2 == 0:
-                player2 = 1
-            else:
-                player2 = (player2 - 1) % 2
+        elif event.type == SDL_KEYDOWN:
+            if event.key == SDLK_ESCAPE:
+                game_framework.quit()
+            if event.key == SDLK_SPACE:
+                game_data.select_mod = map
+                game_data.player_1 = player1
+                game_data.player_2 = player2
+                game_framework.change_mode(full_it_up_main)
+            if event.key == SDLK_d:
+                player1 = (player1 + 1) % 2
+            if event.key == SDLK_a:
+                if player1 == 0:
+                    player1 = 1
+                else:
+                    player1 = (player1 - 1) % 2
+            if event.key == SDLK_RIGHT:
+                player2 = (player2 + 1) % 2
+            if event.key == SDLK_LEFT:
+                if player2 == 0:
+                    player2 = 1
+                else:
+                    player2 = (player2 - 1) % 2
 
     pass
