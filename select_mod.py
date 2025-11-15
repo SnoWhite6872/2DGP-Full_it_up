@@ -6,14 +6,18 @@ import game_data
 image0 = None
 image1 = None
 image2 = None
+sele_1 = None
+sele_2 = None
 cc = None
 cb = None
 
 def init():
-    global map, image0, image1, cc, cb, player1, player2
+    global map, image0, image1, cc, cb, player1, player2, sele_1, sele_2
     player1 = 0
     player2 = 0
     map = 0
+    sele_1 = load_image("sele_1.png")
+    sele_2 = load_image("sele_2.png")
     image0 = load_image('BG_basic.png')
     image1 = load_image('BG_luxury.png')
     cc = load_image('Cha_cat.png')
@@ -45,6 +49,8 @@ def draw():
         cc.draw(1380, 700)
     elif player2 == 1:
         cb.draw(1380, 700)
+
+    sele_1.draw(740, 100)
 
     update_canvas()
     pass
