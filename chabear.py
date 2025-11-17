@@ -11,7 +11,7 @@ RUN_SPEED_MPS = (RUN_SPEED_MPM / 60.0)        # 초속
 RUN_SPEED_PPS = (RUN_SPEED_MPS * PIXEL_PER_METER)  #달리기 픽셀 속도
 
 
-TIME_PER_ACTION = 1.0
+TIME_PER_ACTION = 1.0         #1초 액션 당 걸리는 시간
 ACTION_PER_TIME = 1.0 / TIME_PER_ACTION
 FRAMES_PER_IDLE = 5
 
@@ -46,7 +46,7 @@ class WAttack:
             self.chabear.frame = (self.chabear.frame + FRAMES_PER_IDLE * ACTION_PER_TIME * game_framework.frame_time) % 2
             self.timer -= 1
             if self.timer <= 0:
-                self.chabear.state_machine.handle_state_event(('RUN', None))
+                self.chabear.state_machine.handle_state_event(('IDLE', None))
 
         def draw(self):
             self.chabear.images['Touch'][int(self.chabear.frame)].draw(self.chabear.x, self.chabear.y, 100, 120)
