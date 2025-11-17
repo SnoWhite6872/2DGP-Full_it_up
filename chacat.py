@@ -98,6 +98,7 @@ class Idle:
         pass
 
 class Chacat:
+    images = None
     def __init__(self):
         self.load_images()
         self.x, self.y = 200, 400
