@@ -12,7 +12,7 @@ cc = None
 cb = None
 
 def init():
-    global map, image0, image1, cc, cb, player1, player2, sele_1, sele_2
+    global map, image0, image1, cc, cb, player1, player2, sele_1, sele_2,ccs, cbs
     player1 = 0
     player2 = 0
     map = 0
@@ -22,23 +22,28 @@ def init():
     image1 = load_image('BG_luxury.png')
     cc = load_image('Cha_cat.png')
     cb = load_image('Cha_bear.png')
+    ccs = load_image('Cha_cat_sel.png')
+    cbs = load_image('Cha_bear_sel.png')
     pass
 
 def finish():
-    global image0, image1, cc, cb
-    del image0, image1, cc, cb
+    global image0, image1, cc, cb, ccs, cbs
+    del image0, image1, cc, cb, ccs, cbs
     pass
 
 def update():
     pass
 
 def draw():
-    global map, player1, player2
+    global map, player1, player2, ccs, cbs
     clear_canvas()
     if map == 0:
         image0.draw(1480//2, 1050//2)
     elif map == 1:
         image1.draw(1480//2, 1050//2)
+
+    ccs.draw(740, 100, 100, 100)
+    cbs.draw(940, 100, 100, 100)
 
     if player1 == 0:
         cc.draw(100, 700)
@@ -51,6 +56,9 @@ def draw():
         cb.draw(1380, 700)
 
     sele_1.draw(740, 100)
+    sele_2.draw(940, 100)
+
+
 
     update_canvas()
     pass
