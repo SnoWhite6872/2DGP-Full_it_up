@@ -35,18 +35,18 @@ class WAttack:
         def enter(self, e):
             if m_down(e):
                 print("2P 공격")
-            self.timer = 30
+            self.timer = 3000
 
         def exit(self, e):
             pass
 
         def do(self):
-            self.chabear.x += self.chabear.x_dir * RUN_SPEED_PPS * game_framework.frame_time
-            self.chabear.y += self.chabear.y_dir * RUN_SPEED_PPS * game_framework.frame_time
+            # self.chabear.x += self.chabear.x_dir * RUN_SPEED_PPS * game_framework.frame_time
+            # self.chabear.y += self.chabear.y_dir * RUN_SPEED_PPS * game_framework.frame_time
             self.chabear.frame = (self.chabear.frame + FRAMES_PER_IDLE * ACTION_PER_TIME * game_framework.frame_time) % 2
             self.timer -= 1
             if self.timer <= 0:
-                self.chabear.state_machine.handle_state_event(('IDLE', None))
+                self.chabear.state_machine.handle_state_event(('STOP', None))
 
         def draw(self):
             self.chabear.images['Touch'][int(self.chabear.frame)].draw(self.chabear.x, self.chabear.y, 100, 120)
@@ -115,7 +115,7 @@ class Chabear:
 
                 self.IDLE: { m_down: self.WATTACK,event_run: self.RUN},
                 self.RUN: {m_down: self.WATTACK,event_stop: self.IDLE},
-                self.WATTACK : {event_stop: self.IDLE, event_run: self.RUN}
+                self.WATTACK : { event_stop : self.IDLE}
             }
         )
 

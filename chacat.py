@@ -39,11 +39,11 @@ class WAttack:
             pass
 
         def do(self):
-            self.chacat.x += self.chacat.x_dir * RUN_SPEED_PPS
-            self.chacat.y += self.chacat.y_dir * RUN_SPEED_PPS
+            self.chacat.x += self.chacat.x_dir * RUN_SPEED_PPS * game_framework.frame_time
+            self.chacat.y += self.chacat.y_dir * RUN_SPEED_PPS * game_framework.frame_time
             self.timer -= 1
             if self.timer <= 0:
-                self.chacat.state_machine.handle_state_event(('RUN', 0))
+                self.chacat.state_machine.handle_state_event(('RUN', None))
 
             self.chacat.frame = (self.chacat.frame + FRAMES_PER_IDLE * ACTION_PER_TIME * game_framework.frame_time) % 2
 
