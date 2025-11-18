@@ -16,6 +16,8 @@ def init():
     player1 = 0
     player2 = 0
     map = 0
+
+
     sele_1 = load_image("sele_1.png")
     sele_2 = load_image("sele_2.png")
     image0 = load_image('BG_basic.png')
@@ -35,7 +37,7 @@ def update():
     pass
 
 def draw():
-    global map, player1, player2, ccs, cbs
+    global map, player1, player2
     clear_canvas()
     if map == 0:
         image0.draw(1480//2, 1050//2)
@@ -47,16 +49,18 @@ def draw():
 
     if player1 == 0:
         cc.draw(100, 700)
+        sele_1.draw(740, 100)
     elif player1 == 1:
         cb.draw(100, 700)
+        sele_1.draw(940, 100)
 
     if player2 == 0:
         cc.draw(1380, 700)
+        sele_2.draw(740, 100)
     elif player2 == 1:
         cb.draw(1380, 700)
+        sele_2.draw(940, 100)
 
-    sele_1.draw(740, 100)
-    sele_2.draw(940, 100)
 
 
 
@@ -64,7 +68,7 @@ def draw():
     pass
 
 def handle_events():
-    global map, player1, player2
+    global map, player1, player2, p1_box, p2_box
     event_list = get_events()  # 버퍼로부터 모든 입력을 갖고 온다.
     for event in event_list:
         if event.type == SDL_QUIT:
