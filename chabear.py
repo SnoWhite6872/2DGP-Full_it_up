@@ -68,7 +68,7 @@ class Run:
 
 
     def exit(self,e):
-        if( n_down(e)):
+        if n_down(e):
             self.chabear.throw_cookie()
         pass
 
@@ -90,7 +90,7 @@ class Idle:
             self.chabear.f_dir = e[1]
 
     def exit(self,e):
-        if( n_down(e)):
+        if n_down(e):
             self.chabear.throw_cookie()
         pass
 
@@ -113,9 +113,11 @@ class Chabear:
         self.y_dir = 0
         self.f_dir = 1
         self.frame = 0
+        self.load_time = get_time()
+        self.cookie_count = 0
         game_world.add_collision_pair('chabear:cookie', self, None)
 
-
+        self.font = load_font('ENCR10B.TTF', 16)
         self.RUN = Run(self)
         self.IDLE = Idle(self)
         self.WATTACK = WAttack(self)
@@ -139,6 +141,9 @@ class Chabear:
 
     def update(self):
         self.state_machine.update()
+        if get_time() - self.load_time > 3 and self.cookie_count < 4:
+            self.cookie_count += 1
+            self.load_time = get_time()
 
     def handle_event(self, event):
         if event.key in (SDLK_LEFT, SDLK_RIGHT, SDLK_UP, SDLK_DOWN):
@@ -172,14 +177,16 @@ class Chabear:
     def draw(self):
         self.state_machine.draw()
         draw_rectangle(*self.get_bb())
-
+        self.font.draw(self.x-10, self.y + 50, f'{self.cookie_count:02d}', (255, 255, 0))
     def get_bb(self):
         return self.x - 35, self.y - 60, self.x + 35, self.y + 40
 
     def throw_cookie(self):
-        cookie = Cookie(self.x, self.y, self.f_dir * 25)
-        game_world.add_object(cookie, 1)
-        game_world.add_collision_pair('chacat:cookie', None, cookie)
+        if self.cookie_count >0:
+            cookie = Cookie(self.x, self.y, self.f_dir * 25)
+            game_world.add_object(cookie, 1)
+            game_world.add_collision_pair('chacat:cookie', None, cookie)
+            self.cookie_count -= 1
 
         pass
 
