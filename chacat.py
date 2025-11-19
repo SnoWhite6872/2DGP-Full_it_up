@@ -2,6 +2,7 @@ from pico2d import *
 from sdl2 import SDL_KEYDOWN, SDL_KEYUP, SDLK_w, SDLK_a, SDLK_s, SDLK_d, SDLK_q
 from state_machine import StateMachine
 import game_framework
+import game_world
 
 
 def event_stop(e):
@@ -101,11 +102,14 @@ class Chacat:
     images = None
     def __init__(self):
         self.load_images()
+        self.hp = 0
         self.x, self.y = 200, 400
         self.x_dir = 0
         self.y_dir = 0
         self.f_dir = 1
         self.frame = 0
+
+        game_world.add_collision_pair('chacat:cookie', self, None)
 
         self.RUN = Run(self)
         self.IDLE = Idle(self)
@@ -171,3 +175,8 @@ class Chacat:
 
     def get_bb(self):
         return self.x - 35, self.y - 60, self.x + 35, self.y + 40
+
+    def handle_collision(self, group, other):
+        if group == 'chacat:cookie':
+            self.hp += 10
+            print('cat hp + 10')
