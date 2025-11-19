@@ -34,6 +34,7 @@ def remove_object(o):
     for layer in world:
         if o in layer:
             layer.remove(o)
+            remove_collision_object(o)
             return
 
 def clear():
