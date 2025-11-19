@@ -183,6 +183,7 @@ class Chabear:
 
         pass
 
-def handle_collision(self, group, other):
-        if group == 'chabear:cookie':
-            self.hp += 10
+    def handle_collision(self, group, other):
+            if group == 'chabear:cookie':
+                self.hp += 10
+                print('bear hp + 10')
