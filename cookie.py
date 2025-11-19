@@ -24,6 +24,6 @@ class Cookie:
         return self.x - 25, self.y - 25, self.x + 25, self.y + 25
 
     def handle_collision(self, group, other):
-        if group == 'chabear:Tcookie' or group == 'chacat:cookie':
+        if group == 'chabear:cookie' or group == 'chacat:cookie':
             game_world.remove_object(self)
 
