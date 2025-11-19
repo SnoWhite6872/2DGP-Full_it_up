@@ -38,8 +38,9 @@ class WAttack:
             self.timer = 0
 
         def enter(self, e):
-            if m_down(e):
-                print("2P 공격")
+            if self.chabear.x_dir != 0:
+                self.chabear.f_dir = self.chabear.x_dir
+
             self.timer = 300
 
         def exit(self, e):
@@ -112,6 +113,7 @@ class Chabear:
         self.y_dir = 0
         self.f_dir = 1
         self.frame = 0
+        game_world.add_collision_pair('chabear:cookie', self, None)
 
 
         self.RUN = Run(self)
