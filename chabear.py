@@ -1,6 +1,8 @@
 from pico2d import *
-from sdl2 import SDL_KEYUP, SDL_KEYDOWN, SDLK_RIGHT, SDLK_LEFT, SDLK_UP, SDLK_DOWN, SDLK_m
+from sdl2 import SDL_KEYUP, SDL_KEYDOWN, SDLK_RIGHT, SDLK_LEFT, SDLK_UP, SDLK_DOWN, SDLK_m, SDLK_n
 from state_machine import StateMachine
+from cookie import Cookie
+import game_world
 import game_framework
 
 
@@ -26,6 +28,9 @@ def event_run(e):
 
 def m_down(e):
     return e[0] == 'INPUT' and e[1].type == SDL_KEYDOWN and e[1].key == SDLK_m
+
+def n_down(e):
+    return e[0] == 'INPUT' and e[1].type == SDL_KEYDOWN and e[1].key == SDLK_n
 
 class WAttack:
         def __init__(self, chabear):
@@ -58,10 +63,12 @@ class Run:
 
     def enter(self,e):
         if self.chabear.x_dir != 0:                   #가로 방향이 0이 아니면 가로 방향은 시선 방향과 같다.
-            self.chabear.f_dir = self.chabear.y_dir
+            self.chabear.f_dir = self.chabear.x_dir
 
 
     def exit(self,e):
+        if( n_down(e)):
+            self.chabear.throw_cookie()
         pass
 
     def do(self):
@@ -78,11 +85,12 @@ class Idle:
     def __init__(self, chabear):
         self.chabear = chabear
     def enter(self,e):
-        self.chabear.w_dir = 0
-        self.chabear.h_dir = 0
-        pass
+        if event_stop(e):
+            self.chabear.f_dir = e[1]
 
     def exit(self,e):
+        if( n_down(e)):
+            self.chabear.throw_cookie()
         pass
 
     def do(self):
@@ -97,6 +105,7 @@ class Idle:
 class Chabear:
     images = None
     def __init__(self):
+        self.hp = 0
         self.load_images()
         self.x, self.y = 100, 200
         self.x_dir = 0
@@ -113,8 +122,8 @@ class Chabear:
             self.IDLE,               #시작 state
         {
 
-                self.IDLE: { m_down: self.WATTACK,event_run: self.RUN},
-                self.RUN: {m_down: self.WATTACK,event_stop: self.IDLE},
+                self.IDLE: {n_down: self.IDLE, m_down: self.WATTACK,event_run: self.RUN},
+                self.RUN: {n_down: self.RUN, m_down: self.WATTACK,event_stop: self.IDLE},
                 self.WATTACK : { event_stop : self.IDLE}
             }
         )
@@ -166,9 +175,12 @@ class Chabear:
         return self.x - 35, self.y - 60, self.x + 35, self.y + 40
 
     def throw_cookie(self):
+        cookie = Cookie(self.x, self.y, self.f_dir * 25)
+        game_world.add_object(cookie, 1)
+        game_world.add_collision_pair('chacat:Tcookie', None, cookie)
+
         pass
 
-
-
-
-
+def handle_collision(self, group, other):
+        if group == 'chabear:Tcookie':
+            self.hp += 10
