@@ -1,6 +1,7 @@
 from pico2d import *
 from sdl2 import SDL_KEYDOWN, SDL_KEYUP, SDLK_w, SDLK_a, SDLK_s, SDLK_d, SDLK_q
 from state_machine import StateMachine
+from cookie import Cookie
 import game_framework
 import game_world
 
@@ -32,9 +33,9 @@ class WAttack:
             self.timer = 0
 
         def enter(self,e):
-            if q_down(e):
-                print("1P 공격")
-            self.timer = 30
+            if self.chacat.x_dir != 0:
+                self.chacat.f_dir = self.chacat.x_dir
+            self.timer = 300
 
         def exit(self,e):
             pass
@@ -82,8 +83,8 @@ class Idle:
 
 
     def enter(self,e):
-        self.chacat.w_dir = 0
-        self.chacat.h_dir = 0
+        if event_stop(e):
+            self.chacat.f_dir = e[1]
         pass
 
     def exit(self,e):
@@ -120,7 +121,7 @@ class Chacat:
         {
             self.IDLE: {q_down: self.WATTACK, event_run : self.RUN},
             self.RUN: {q_down: self.WATTACK, event_stop : self.IDLE},
-            self.WATTACK : {event_run: self.RUN, event_stop: self.IDLE},
+            self.WATTACK : {event_stop: self.IDLE},
 
             }
         )
@@ -170,6 +171,11 @@ class Chacat:
                         self.state_machine.handle_state_event(('RUN', None))
         else:
             self.state_machine.handle_state_event(('INPUT', event))
+
+    def throw_cookie(self):
+        cookie = Cookie(self.x, self.y, self.f_dir * 25)
+        game_world.add_object(cookie, 1)
+        game_world.add_collision_pair('chabear:cookie', None, cookie)
 
 
 
