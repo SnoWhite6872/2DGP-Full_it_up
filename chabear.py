@@ -165,6 +165,8 @@ class Chabear:
     def get_bb(self):
         return self.x - 35, self.y - 60, self.x + 35, self.y + 40
 
+    def throw_cookie(self):
+        pass
 
 
 
