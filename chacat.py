@@ -1,5 +1,5 @@
 from pico2d import *
-from sdl2 import SDL_KEYDOWN, SDL_KEYUP, SDLK_w, SDLK_a, SDLK_s, SDLK_d, SDLK_q
+from sdl2 import SDL_KEYDOWN, SDL_KEYUP, SDLK_w, SDLK_a, SDLK_s, SDLK_d, SDLK_q, SDLK_e
 from state_machine import StateMachine
 from cookie import Cookie
 import game_framework
@@ -14,6 +14,9 @@ def event_run(e):
 
 def q_down(e):
     return e[0] == 'INPUT' and e[1].type == SDL_KEYDOWN and e[1].key == SDLK_q #1p 약공격
+
+def e_down(e):
+    return e[0] == 'INPUT' and e[1].type == SDL_KEYDOWN and e[1].key == SDLK_e
 
 PIXEL_PER_METER = (1.0 / 0.03)  # 10픽셀 30센치미터
 RUN_SPEED_KMPH = 50.0  # 시속 20킬로미터
@@ -64,6 +67,8 @@ class Run:
                 self.chacat.f_dir = self.chacat.x_dir
 
         def exit(self,e):
+            if e_down(e):
+                self.chacat.throw_cookie()
             pass
 
         def do(self):
@@ -88,6 +93,8 @@ class Idle:
         pass
 
     def exit(self,e):
+        if e_down(e):
+            self.chacat.throw_cookie()
         pass
 
     def do(self):
@@ -119,8 +126,8 @@ class Chacat:
         self.state_machine = StateMachine(
             self.IDLE,
         {
-            self.IDLE: {q_down: self.WATTACK, event_run : self.RUN},
-            self.RUN: {q_down: self.WATTACK, event_stop : self.IDLE},
+            self.IDLE: {e_down: self.IDLE,q_down: self.WATTACK, event_run : self.RUN},
+            self.RUN: {e_down:self.RUN,q_down: self.WATTACK, event_stop : self.IDLE},
             self.WATTACK : {event_stop: self.IDLE},
 
             }
