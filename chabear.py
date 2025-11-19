@@ -40,7 +40,7 @@ class WAttack:
         def enter(self, e):
             if m_down(e):
                 print("2P 공격")
-            self.timer = 3000
+            self.timer = 300
 
         def exit(self, e):
             pass
@@ -54,7 +54,7 @@ class WAttack:
                 self.chabear.state_machine.handle_state_event(('STOP', None))
 
         def draw(self):
-            self.chabear.images['Touch'][int(self.chabear.frame)].draw(self.chabear.x, self.chabear.y, 100, 120)
+            self.chabear.images['Touch'][1].draw(self.chabear.x, self.chabear.y, 100, 120)
             pass
 
 class Run:
@@ -177,10 +177,10 @@ class Chabear:
     def throw_cookie(self):
         cookie = Cookie(self.x, self.y, self.f_dir * 25)
         game_world.add_object(cookie, 1)
-        game_world.add_collision_pair('chacat:Tcookie', None, cookie)
+        game_world.add_collision_pair('chacat:cookie', None, cookie)
 
         pass
 
 def handle_collision(self, group, other):
-        if group == 'chabear:Tcookie':
+        if group == 'chabear:cookie':
             self.hp += 10
