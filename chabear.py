@@ -16,6 +16,7 @@ RUN_SPEED_PPS = (RUN_SPEED_MPS * PIXEL_PER_METER)  #달리기 픽셀 속도
 TIME_PER_ACTION = 1.0         #1초 액션 당 걸리는 시간
 ACTION_PER_TIME = 1.0 / TIME_PER_ACTION
 FRAMES_PER_IDLE = 5
+FRAMES_PER_TOUCH = 5
 
 bear_animation_names = ['Idle', 'Run', 'Touch']
 
@@ -31,6 +32,31 @@ def m_down(e):
 
 def n_down(e):
     return e[0] == 'INPUT' and e[1].type == SDL_KEYDOWN and e[1].key == SDLK_n
+
+def event_touch(e):
+    return e[0] == 'TOUCH'
+
+class Touch:
+    def __init__(self, chabear):
+
+        self.chabear = chabear
+        self.time =0
+
+    def enter(self, e):
+        self.time = get_time()
+
+    def exit(self,e):
+        pass
+
+    def do(self):
+        self.chabear.frame = (self.chabear.frame + FRAMES_PER_TOUCH * ACTION_PER_TIME * game_framework.frame_time) % 2
+        if get_time() - self.time > 3:
+            self.chabear.state_machine.handle_state_event(('STOP', None))
+        pass
+
+    def draw(self):
+        self.chabear.images['Touch'][int(self.chabear.frame)].draw(self.chabear.x, self.chabear.y, 100, 120)
+
 
 class WAttack:
         def __init__(self, chabear):
@@ -55,7 +81,7 @@ class WAttack:
                 self.chabear.state_machine.handle_state_event(('STOP', None))
 
         def draw(self):
-            self.chabear.images['Touch'][1].draw(self.chabear.x, self.chabear.y, 100, 120)
+            self.chabear.images['Touch'][int(self.chabear.frame)].draw(self.chabear.x, self.chabear.y, 100, 120)
             pass
 
 class Run:
@@ -121,14 +147,16 @@ class Chabear:
         self.RUN = Run(self)
         self.IDLE = Idle(self)
         self.WATTACK = WAttack(self)
+        self.TOUCH = Touch(self)
 
         self.state_machine = StateMachine(
             self.IDLE,               #시작 state
         {
 
-                self.IDLE: {n_down: self.IDLE, m_down: self.WATTACK,event_run: self.RUN},
-                self.RUN: {n_down: self.RUN, m_down: self.WATTACK,event_stop: self.IDLE},
-                self.WATTACK : { event_stop : self.IDLE}
+                self.IDLE: {event_touch: self.TOUCH, n_down: self.IDLE, m_down: self.WATTACK,event_run: self.RUN},
+                self.RUN: {event_touch: self.TOUCH, n_down: self.RUN, m_down: self.WATTACK,event_stop: self.IDLE},
+                self.WATTACK : { event_stop : self.IDLE},
+                self.TOUCH : { event_stop : self.IDLE}
             }
         )
 
@@ -194,3 +222,5 @@ class Chabear:
             if group == 'chabear:cookie':
                 self.hp += 10
                 print('bear hp + 10')
+                self.state_machine.handle_state_event(('TOUCH', None))
+
