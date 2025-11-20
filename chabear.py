@@ -56,8 +56,10 @@ class Touch:
         pass
 
     def draw(self):
-        self.chabear.images['Touch'][int(self.chabear.frame)].draw(self.chabear.x, self.chabear.y, 100, 120)
-
+        if self.chabear.f_dir == -1:
+            self.chabear.images['Touch'][1].draw(self.chabear.x, self.chabear.y, 100, 120)
+        else:
+            self.chabear.images['Touch'][1].composite_draw(0,'h', self.chabear.x, self.chabear.y, 100, 120)
 
 class WAttack:
         def __init__(self, chabear):
@@ -82,7 +84,11 @@ class WAttack:
                 self.chabear.state_machine.handle_state_event(('STOP', None))
 
         def draw(self):
-            self.chabear.images['Touch'][int(self.chabear.frame)].draw(self.chabear.x, self.chabear.y, 100, 120)
+            if self.chabear.f_dir == -1:
+                self.chabear.images['Touch'][int(self.chabear.frame)].draw(self.chabear.x, self.chabear.y, 100, 120)
+            else:
+                self.chabear.images['Touch'][int(self.chabear.frame)].composite_draw(0, 'h', self.chabear.x,
+                                                                                   self.chabear.y, 100, 120)
             pass
 
 class Run:
@@ -106,7 +112,10 @@ class Run:
         pass
 
     def draw(self):
-        self.chabear.images['Run'][int(self.chabear.frame)].draw(self.chabear.x, self.chabear.y, 100, 120)
+        if self.chabear.f_dir == -1:
+            self.chabear.images['Run'][int(self.chabear.frame)].draw(self.chabear.x, self.chabear.y, 100, 120)
+        else:
+            self.chabear.images['Run'][int(self.chabear.frame)].composite_draw(0, 'h', self.chabear.x, self.chabear.y, 100, 120)
 
 
 class Idle:
@@ -126,8 +135,10 @@ class Idle:
         pass
 
     def draw(self):
-        self.chabear.images['Idle'][int(self.chabear.frame)].draw(self.chabear.x, self.chabear.y, 100, 120)
-
+        if self.chabear.f_dir == -1:
+            self.chabear.images['Idle'][int(self.chabear.frame)].draw(self.chabear.x, self.chabear.y, 100, 120)
+        else:
+            self.chabear.images['Idle'][int(self.chabear.frame)].composite_draw(0, 'h', self.chabear.x, self.chabear.y, 100, 120)
 
 
 class Chabear:
@@ -141,8 +152,9 @@ class Chabear:
         self.f_dir = 1
         self.frame = 0
         self.load_time = get_time()
-        self.cookie_count = 0
+        self.cookie_count = 100
         game_world.add_collision_pair('chabear:cookie', self, None)
+        game_world.add_collision_pair('chabear:icetea', self, None)
 
         self.font = load_font('ENCR10B.TTF', 16)
         self.RUN = Run(self)
@@ -173,6 +185,8 @@ class Chabear:
         if get_time() - self.load_time > 3 and self.cookie_count < 4:
             self.cookie_count += 1
             self.load_time = get_time()
+        if self.hp < 0:
+            self.hp = 0
         game_data.player2_hp = self.hp
 
     def handle_event(self, event):
@@ -225,4 +239,6 @@ class Chabear:
                 self.hp += 10
                 print('bear hp + 10')
                 self.state_machine.handle_state_event(('TOUCH', None))
+            if group == 'chabear:icetea':
+                self.hp -= 15
 

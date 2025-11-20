@@ -53,7 +53,10 @@ class Touch:
         pass
 
     def draw(self):
-        self.chacat.images['Touch'][int(self.chacat.frame)].draw(self.chacat.x, self.chacat.y, 100, 120)
+        if self.chacat.f_dir == -1:
+            self.chacat.images['Touch'][int(self.chacat.frame)].draw(self.chacat.x, self.chacat.y, 100, 120)
+        else:
+            self.chacat.images['Touch'][int(self.chacat.frame)].composite_draw(0, 'h',self.chacat.x, self.chacat.y, 100, 120)
 
 class WAttack:
         def __init__(self, chacat):
@@ -78,7 +81,10 @@ class WAttack:
             self.chacat.frame = (self.chacat.frame + FRAMES_PER_IDLE * ACTION_PER_TIME * game_framework.frame_time) % 2
 
         def draw(self):
-            self.chacat.images['Touch'][int(self.chacat.frame)].draw(self.chacat.x, self.chacat.y, 100, 120)
+            if self.chacat.f_dir == -1:
+                self.chacat.images['Touch'][int(self.chacat.frame)].draw(self.chacat.x, self.chacat.y, 100, 120)
+            else:
+                self.chacat.images['Touch'][int(self.chacat.frame)].composite_draw(0, 'h', self.chacat.x, self.chacat.y,100, 120)
             pass
 
 
@@ -104,7 +110,10 @@ class Run:
             pass
 
         def draw(self):
-            self.chacat.images['Run'][int(self.chacat.frame)].draw(self.chacat.x, self.chacat.y, 100, 120)
+            if self.chacat.f_dir == -1:
+                self.chacat.images['Run'][int(self.chacat.frame)].draw(self.chacat.x, self.chacat.y, 100, 120)
+            else:
+                self.chacat.images['Run'][int(self.chacat.frame)].composite_draw(0, 'h', self.chacat.x, self.chacat.y,100, 120)
 
 
 class Idle:
@@ -127,8 +136,10 @@ class Idle:
         pass
 
     def draw(self):
-        self.chacat.images['Idle'][int(self.chacat.frame)].draw(self.chacat.x, self.chacat.y, 100, 120)
-
+        if self.chacat.f_dir == -1:
+            self.chacat.images['Idle'][int(self.chacat.frame)].draw(self.chacat.x, self.chacat.y, 100, 120)
+        else:
+            self.chacat.images['Idle'][int(self.chacat.frame)].composite_draw(0, 'h',self.chacat.x, self.chacat.y, 100, 120)
         pass
 
 class Chacat:
@@ -145,6 +156,7 @@ class Chacat:
         self.load_time = get_time()
 
         game_world.add_collision_pair('chacat:cookie', self, None)
+        game_world.add_collision_pair('chabear:icetea', self, None)
 
         self.TOUCH = Touch(self)
         self.font = load_font('ENCR10B.TTF', 16)
@@ -177,6 +189,8 @@ class Chacat:
             self.cookie_count += 1
             self.load_time = get_time()
         game_data.player1_hp = self.hp
+        if self.hp < 0:
+            self.hp = 0
         pass
 
     def draw(self):
@@ -229,3 +243,5 @@ class Chacat:
             self.hp += 10
             print('cat hp + 10')
             self.state_machine.handle_state_event(('TOUCH', None))
+        if group == 'cahcat:icetea':
+            self.hp -= 15
