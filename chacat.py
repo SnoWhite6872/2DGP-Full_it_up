@@ -48,7 +48,7 @@ class Touch:
 
     def do(self):
         self.chacat.frame = (self.chacat.frame + FRAMES_PER_TOUCH * ACTION_PER_TIME * game_framework.frame_time) % 2
-        if get_time() - self.time > 3:
+        if get_time() - self.time > 1:
             self.chacat.state_machine.handle_state_event(('STOP', None))
         pass
 
@@ -243,5 +243,5 @@ class Chacat:
             self.hp += 10
             print('cat hp + 10')
             self.state_machine.handle_state_event(('TOUCH', None))
-        if group == 'cahcat:icetea':
+        if group == 'chacat:icetea':
             self.hp -= 15
