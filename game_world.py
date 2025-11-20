@@ -40,6 +40,7 @@ def remove_object(o):
 def clear():
     for layer in world:
         layer.clear()
+    collision_pair.clear()
 
 
 def collide(a,b): #충돌 체크 함수 a와 b의 충돌
