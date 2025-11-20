@@ -51,7 +51,7 @@ class Touch:
 
     def do(self):
         self.chabear.frame = (self.chabear.frame + FRAMES_PER_TOUCH * ACTION_PER_TIME * game_framework.frame_time) % 2
-        if get_time() - self.time > 3:
+        if get_time() - self.time >= 1:
             self.chabear.state_machine.handle_state_event(('STOP', None))
         pass
 
@@ -146,13 +146,13 @@ class Chabear:
     def __init__(self):
         self.hp = 0
         self.load_images()
-        self.x, self.y = 100, 200
+        self.x, self.y = 1380, 700
         self.x_dir = 0
         self.y_dir = 0
-        self.f_dir = 1
+        self.f_dir = -1
         self.frame = 0
         self.load_time = get_time()
-        self.cookie_count = 100
+        self.cookie_count = 0
         game_world.add_collision_pair('chabear:cookie', self, None)
         game_world.add_collision_pair('chabear:icetea', self, None)
 
@@ -182,10 +182,10 @@ class Chabear:
 
     def update(self):
         self.state_machine.update()
-        if get_time() - self.load_time > 3 and self.cookie_count < 4:
+        if get_time() - self.load_time > 2 and self.cookie_count < 4:
             self.cookie_count += 1
             self.load_time = get_time()
-        if self.hp < 0:
+        if self.hp <= 0:
             self.hp = 0
         game_data.player2_hp = self.hp
 
@@ -235,10 +235,10 @@ class Chabear:
         pass
 
     def handle_collision(self, group, other):
-            if group == 'chabear:cookie':
-                self.hp += 10
-                print('bear hp + 10')
-                self.state_machine.handle_state_event(('TOUCH', None))
-            if group == 'chabear:icetea':
-                self.hp -= 15
+        if group == 'chabear:cookie':
+            self.hp += 10
+            print('bear hp + 10')
+            self.state_machine.handle_state_event(('TOUCH', None))
+        if group == 'chabear:icetea':
+            self.hp -= 15
 

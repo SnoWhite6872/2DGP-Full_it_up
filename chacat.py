@@ -48,15 +48,15 @@ class Touch:
 
     def do(self):
         self.chacat.frame = (self.chacat.frame + FRAMES_PER_TOUCH * ACTION_PER_TIME * game_framework.frame_time) % 2
-        if get_time() - self.time > 1:
+        if get_time() - self.time >= 1:
             self.chacat.state_machine.handle_state_event(('STOP', None))
         pass
 
     def draw(self):
         if self.chacat.f_dir == -1:
-            self.chacat.images['Touch'][int(self.chacat.frame)].draw(self.chacat.x, self.chacat.y, 100, 120)
+            self.chacat.images['Touch'][1].draw(self.chacat.x, self.chacat.y, 100, 120)
         else:
-            self.chacat.images['Touch'][int(self.chacat.frame)].composite_draw(0, 'h',self.chacat.x, self.chacat.y, 100, 120)
+            self.chacat.images['Touch'][1].composite_draw(0, 'h',self.chacat.x, self.chacat.y, 100, 120)
 
 class WAttack:
         def __init__(self, chacat):
@@ -147,7 +147,7 @@ class Chacat:
     def __init__(self):
         self.load_images()
         self.hp = 0
-        self.x, self.y = 200, 400
+        self.x, self.y = 100, 700
         self.x_dir = 0
         self.y_dir = 0
         self.f_dir = 1
@@ -156,7 +156,7 @@ class Chacat:
         self.load_time = get_time()
 
         game_world.add_collision_pair('chacat:cookie', self, None)
-        game_world.add_collision_pair('chabear:icetea', self, None)
+        game_world.add_collision_pair('chacat:icetea', self, None)
 
         self.TOUCH = Touch(self)
         self.font = load_font('ENCR10B.TTF', 16)
@@ -185,12 +185,12 @@ class Chacat:
 
     def update(self):
         self.state_machine.update()
-        if get_time() - self.load_time > 3 and self.cookie_count < 4:
+        if get_time() - self.load_time > 2 and self.cookie_count < 4:
             self.cookie_count += 1
             self.load_time = get_time()
-        game_data.player1_hp = self.hp
-        if self.hp < 0:
+        if self.hp <= 0:
             self.hp = 0
+        game_data.player1_hp = self.hp
         pass
 
     def draw(self):
