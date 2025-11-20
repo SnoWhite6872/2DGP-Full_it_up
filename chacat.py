@@ -18,6 +18,9 @@ def q_down(e):
 def e_down(e):
     return e[0] == 'INPUT' and e[1].type == SDL_KEYDOWN and e[1].key == SDLK_e
 
+def event_touch(e):
+    return e[0] == 'TOUCH'
+
 PIXEL_PER_METER = (1.0 / 0.03)  # 10픽셀 30센치미터
 RUN_SPEED_KMPH = 50.0  # 시속 20킬로미터
 RUN_SPEED_MPM = (RUN_SPEED_KMPH * 1000.0 / 60.0) # 분속
@@ -27,8 +30,29 @@ RUN_SPEED_PPS = (RUN_SPEED_MPS * PIXEL_PER_METER)  #달리기 픽셀 속도
 TIME_PER_ACTION = 1.0         #1초 액션 당 걸리는 시간
 ACTION_PER_TIME = 1.0 / TIME_PER_ACTION
 FRAMES_PER_IDLE = 5
+FRAMES_PER_TOUCH = 5
 
 cat_animation_names = ['Idle', 'Run', 'Touch']
+
+class Touch:
+    def __init__(self, chacat):
+        self.chacat = chacat
+        self.time =0
+
+    def enter(self, e):
+        self.time = get_time()
+
+    def exit(self,e):
+        pass
+
+    def do(self):
+        self.chacat.frame = (self.chacat.frame + FRAMES_PER_TOUCH * ACTION_PER_TIME * game_framework.frame_time) % 2
+        if get_time() - self.time > 3:
+            self.chacat.state_machine.handle_state_event(('STOP', None))
+        pass
+
+    def draw(self):
+        self.chacat.images['Touch'][int(self.chacat.frame)].draw(self.chacat.x, self.chacat.y, 100, 120)
 
 class WAttack:
         def __init__(self, chacat):
@@ -200,3 +224,4 @@ class Chacat:
         if group == 'chacat:cookie':
             self.hp += 10
             print('cat hp + 10')
+            self.state_machine.handle_state_event(('TOUCH', None))
