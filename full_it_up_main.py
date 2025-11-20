@@ -5,16 +5,15 @@ from bgbasic import BGbasic
 from chabear import Chabear
 from chacat import Chacat
 from bgluxury import BGluxury
+from item import Icetea
 import game_data
 import select_mod
 
 import game_framework
 
-
-
+timer = get_time()
 
 def handle_events():
-    global running
 
     event_list = get_events()
 
@@ -35,6 +34,7 @@ def init():
     global chacat
     global bgbasic
     global image_gameover
+    global ice_tea
 
     image_gameover = load_image('game_over.png')
     bgbasic = BGbasic()
@@ -47,9 +47,23 @@ def init():
     game_world.add_object(chabear, 1)
     chacat = Chacat()
     game_world.add_object(chacat, 1)
+    ice_tea = Icetea(1480//2, 1050//2)
+    game_world.add_object(ice_tea)
+    game_world.add_collision_pair('chabear:icetea', None, ice_tea)
+    game_world.add_collision_pair('chacat:icetea', None, ice_tea)
+
 
     pass
 
+def spawn_item():
+    global timer, ice_tea
+
+    if get_time() - timer > 10:
+        ice_tea = Icetea()
+        game_world.add_object(ice_tea, 1)
+        game_world.add_collision_pair('chabear:icetea', None, ice_tea)
+        game_world.add_collision_pair('chacat:icetea', None, ice_tea)
+        timer = get_time()
 
 
 
@@ -57,6 +71,7 @@ def update():
     global image_gameover
     game_world.update()
     game_world.handle_collision()
+    spawn_item()
 
     if game_data.player1_hp >= 100 or game_data.player2_hp >= 100:
         game_data.game_end = 1
