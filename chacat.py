@@ -145,6 +145,7 @@ class Chacat:
 
         game_world.add_collision_pair('chacat:cookie', self, None)
 
+        self.TOUCH = Touch(self)
         self.font = load_font('ENCR10B.TTF', 16)
         self.RUN = Run(self)
         self.IDLE = Idle(self)
@@ -153,9 +154,10 @@ class Chacat:
         self.state_machine = StateMachine(
             self.IDLE,
         {
-            self.IDLE: {e_down: self.IDLE,q_down: self.WATTACK, event_run : self.RUN},
-            self.RUN: {e_down:self.RUN,q_down: self.WATTACK, event_stop : self.IDLE},
+            self.IDLE: {event_touch: self.TOUCH,e_down: self.IDLE,q_down: self.WATTACK, event_run : self.RUN},
+            self.RUN: {event_touch: self.TOUCH, e_down:self.RUN,q_down: self.WATTACK, event_stop : self.IDLE},
             self.WATTACK : {event_stop: self.IDLE},
+            self.TOUCH : { event_stop : self.IDLE}
 
             }
         )
