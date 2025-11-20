@@ -58,6 +58,9 @@ def update():
     game_world.update()
     game_world.handle_collision()
 
+    if game_data.player1_hp >= 100 or game_data.player2_hp >= 100:
+        game_data.game_end = 1
+
     # if game_data.player1_hp >= 100 or game_data.player2_hp >=100:
     #     # game_framework.push_mode(game_over_mode)
     #     image_gameover.draw(1480//2, 1050//2,100,100)
