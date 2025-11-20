@@ -6,7 +6,7 @@ from chabear import Chabear
 from chacat import Chacat
 from bgluxury import BGluxury
 import game_data
-import game_over_mode
+import select_mod
 
 import game_framework
 
@@ -23,6 +23,8 @@ def handle_events():
             game_framework.quit()
         elif event.type == SDL_KEYDOWN and event.key == SDLK_ESCAPE:
             game_framework.quit()
+        elif game_data.game_end == 1 and event.type == SDL_KEYDOWN and event.key ==SDLK_SPACE:
+            game_framework.change_mode(select_mod)
         else:
             chabear.handle_event(event)
             chacat.handle_event(event)
@@ -32,7 +34,9 @@ def init():
     global chabear
     global chacat
     global bgbasic
+    global image_gameover
 
+    image_gameover = load_image('game_over.png')
     bgbasic = BGbasic()
     bgluxury = BGluxury()
     if game_data.select_mod == 0:
@@ -50,20 +54,28 @@ def init():
 
 
 def update():
+    global image_gameover
     game_world.update()
     game_world.handle_collision()
 
-    if game_data.player1_hp >= 100 or game_data.player2_hp >=100:
-        game_framework.push_mode(game_over_mode)
+    # if game_data.player1_hp >= 100 or game_data.player2_hp >=100:
+    #     # game_framework.push_mode(game_over_mode)
+    #     image_gameover.draw(1480//2, 1050//2,100,100)
 
 
 def draw():
     clear_canvas()
     game_world.render()
+    if game_data.player1_hp >= 100 or game_data.player2_hp >=100:
+        # game_framework.push_mode(game_over_mode)
+        image_gameover.draw(1480//2, 800, 1000, 200)
     update_canvas()
 
 def finish():
     game_world.clear()
     pass
 
-
+def pause():
+    pass
+def resume():
+    pass

@@ -20,7 +20,7 @@ def update():
 def draw():
     global image
     clear_canvas()
-    image.draw(1480//2, 1050//2)
+    image.draw(1480//2, 1050//2,100,100)
     update_canvas()
     pass
 
@@ -28,5 +28,5 @@ def handle_events():
     event_list = get_events()
 
     for event in event_list:
-        if event.type == SDL_KEYDOWN and event.kye == SDLK_RETURN:
+        if event.type == SDL_KEYDOWN and event.key == SDLK_RETURN:
             game_framework.change_mode(select_mod)
