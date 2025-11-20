@@ -116,9 +116,12 @@ class Chacat:
         self.y_dir = 0
         self.f_dir = 1
         self.frame = 0
+        self.cookie_count = 0
+        self.load_time = get_time()
 
         game_world.add_collision_pair('chacat:cookie', self, None)
 
+        self.font = load_font('ENCR10B.TTF', 16)
         self.RUN = Run(self)
         self.IDLE = Idle(self)
         self.WATTACK = WAttack(self)
@@ -143,6 +146,9 @@ class Chacat:
 
     def update(self):
         self.state_machine.update()
+        if get_time() - self.load_time > 3 and self.cookie_count < 4:
+            self.cookie_count += 1
+            self.load_time = get_time()
         pass
 
     def draw(self):
