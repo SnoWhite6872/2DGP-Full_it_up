@@ -4,3 +4,5 @@ player_2 = 0
 
 player1_hp = 0
 player2_hp = 0
+game_end = 0
+
