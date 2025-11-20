@@ -4,6 +4,7 @@ from state_machine import StateMachine
 from cookie import Cookie
 import game_framework
 import game_world
+import game_data
 
 
 def event_stop(e):
@@ -175,11 +176,12 @@ class Chacat:
         if get_time() - self.load_time > 3 and self.cookie_count < 4:
             self.cookie_count += 1
             self.load_time = get_time()
+        game_data.player1_hp = self.hp
         pass
 
     def draw(self):
         self.state_machine.draw()
-        self.font.draw(self.x-10, self.y + 50, f'{self.cookie_count:02d}', (255, 255, 255))
+        self.font.draw(self.x-10, self.y + 50, f'{self.hp:02d}', (255, 255, 255))
         draw_rectangle(*self.get_bb())
         pass
 

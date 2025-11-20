@@ -4,6 +4,7 @@ from state_machine import StateMachine
 from cookie import Cookie
 import game_world
 import game_framework
+import game_data
 
 
 PIXEL_PER_METER = (1.0 / 0.03)  # 10픽셀 30센치미터
@@ -172,6 +173,7 @@ class Chabear:
         if get_time() - self.load_time > 3 and self.cookie_count < 4:
             self.cookie_count += 1
             self.load_time = get_time()
+        game_data.player2_hp = self.hp
 
     def handle_event(self, event):
         if event.key in (SDLK_LEFT, SDLK_RIGHT, SDLK_UP, SDLK_DOWN):
@@ -205,7 +207,7 @@ class Chabear:
     def draw(self):
         self.state_machine.draw()
         draw_rectangle(*self.get_bb())
-        self.font.draw(self.x-10, self.y + 50, f'{self.cookie_count:02d}', (255, 255, 0))
+        self.font.draw(self.x-10, self.y + 50, f'{self.hp:02d}', (0, 0, 0))
     def get_bb(self):
         return self.x - 35, self.y - 60, self.x + 35, self.y + 40
 
