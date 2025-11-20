@@ -6,6 +6,7 @@ from chabear import Chabear
 from chacat import Chacat
 from bgluxury import BGluxury
 import game_data
+import game_over_mode
 
 import game_framework
 
@@ -51,6 +52,9 @@ def init():
 def update():
     game_world.update()
     game_world.handle_collision()
+
+    if game_data.player1_hp >= 100 or game_data.player2_hp >=100:
+        game_framework.push_mode(game_over_mode)
 
 
 def draw():
