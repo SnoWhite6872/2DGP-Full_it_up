@@ -10,7 +10,7 @@ import game_data
 import select_mod
 
 import game_framework
-Cha = [Chacat(), Chabear()]
+
 timer = get_time()
 
 def handle_events():
@@ -35,6 +35,8 @@ def init():
     global bgbasic
     global image_gameover
     global ice_tea
+
+    Cha = [Chacat(), Chabear()]
 
     image_gameover = load_image('game_over.png')
     bgbasic = BGbasic()
