@@ -10,7 +10,7 @@ import game_data
 import select_mod
 
 import game_framework
-
+Cha = [Chacat(), Chabear()]
 timer = get_time()
 
 def handle_events():
