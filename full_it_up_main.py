@@ -36,7 +36,7 @@ def init():
     global image_gameover
     global ice_tea
 
-    Cha = [Chacat(), Chabear()]
+    Cha = [Chacat, Chabear]
 
     image_gameover = load_image('game_over.png')
     bgbasic = BGbasic()
