@@ -8,8 +8,7 @@ class PlayerTwo:
         self.select_char = character_index
 
     def handle_events(self, event):
-        events_list = get_events()
-        for event in events_list:
+
             if event.type == SDL_KEYDOWN:
                 if event.key == SDLK_UP:
                     event.key = SDLK_w
@@ -37,4 +36,6 @@ class PlayerTwo:
                     event.key = SDLK_q
                 elif event.key == SDLK_n:
                     event.key = SDLK_e
+
+            self.select_char.handle_event(event)
 
