@@ -30,6 +30,6 @@ class Icetea:
         return self.x - 25, self.y - 25, self.x + 25, self.y + 25
 
     def handle_collision(self, group, other):
-        if group == 'chabear:icetea' or group == 'chacat:icetea':
+        if group == 'player:icetea':
             game_world.remove_object(self)
 
