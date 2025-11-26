@@ -58,10 +58,6 @@ def init():
     game_world.add_object(char1, 1)
     game_world.add_object(char2, 1)
 
-    # chabear = Chabear()
-    # game_world.add_object(chabear, 1)
-    # chacat = Chacat()
-    # game_world.add_object(chacat, 1)
     ice_tea = Icetea(1480//2, 1050//2)
     game_world.add_object(ice_tea,1)
     game_world.add_collision_pair('chabear:icetea', None, ice_tea)
