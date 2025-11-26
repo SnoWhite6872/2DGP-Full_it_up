@@ -32,9 +32,7 @@ def handle_events():
     pass
 
 def init():
-    global chabear
-    global chacat
-    global bgbasic
+    global chabear, chacat
     global image_gameover
     global ice_tea
     global char1, char2, p1, p2
@@ -55,12 +53,17 @@ def init():
     elif game_data.select_mod == 1:
         game_world.add_object(bgluxury, 0)
 
+
+    #캐릭터 오브젝트 추가
+    game_world.add_object(char1, 1)
+    game_world.add_object(char2, 2)
+
     # chabear = Chabear()
     # game_world.add_object(chabear, 1)
     # chacat = Chacat()
     # game_world.add_object(chacat, 1)
     ice_tea = Icetea(1480//2, 1050//2)
-    game_world.add_object(ice_tea)
+    game_world.add_object(ice_tea,1)
     game_world.add_collision_pair('chabear:icetea', None, ice_tea)
     game_world.add_collision_pair('chacat:icetea', None, ice_tea)
 
