@@ -60,8 +60,12 @@ def init():
 
     ice_tea = Icetea(1480//2, 1050//2)
     game_world.add_object(ice_tea,1)
-    game_world.add_collision_pair('chabear:icetea', None, ice_tea)
-    game_world.add_collision_pair('chacat:icetea', None, ice_tea)
+
+    #충돌 관리
+    game_world.add_collision_pair('player:player', char1, None)
+    game_world.add_collision_pair('player:player', char2, None)
+    game_world.add_collision_pair('player:icetea', None, ice_tea)
+    #game_world.add_collision_pair('chacat:icetea', None, ice_tea)
 
 
     pass
@@ -72,8 +76,8 @@ def spawn_item():
     if get_time() - timer > 10:
         ice_tea = Icetea()
         game_world.add_object(ice_tea, 1)
-        game_world.add_collision_pair('chabear:icetea', None, ice_tea)
-        game_world.add_collision_pair('chacat:icetea', None, ice_tea)
+        game_world.add_collision_pair('player:icetea', None, ice_tea)
+        #game_world.add_collision_pair('chacat:icetea', None, ice_tea)
         timer = get_time()
 
 
