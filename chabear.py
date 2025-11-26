@@ -101,7 +101,7 @@ class Run:
 
 
     def exit(self,e):
-        if n_down(e):
+        if e_down(e):
             self.chabear.throw_cookie()
         pass
 
@@ -126,7 +126,7 @@ class Idle:
             self.chabear.f_dir = e[1]
 
     def exit(self,e):
-        if n_down(e):
+        if e_down(e):
             self.chabear.throw_cookie()
         pass
 
@@ -166,8 +166,8 @@ class Chabear:
             self.IDLE,               #시작 state
         {
 
-                self.IDLE: {event_touch: self.TOUCH, n_down: self.IDLE, m_down: self.WATTACK,event_run: self.RUN},
-                self.RUN: {event_touch: self.TOUCH, n_down: self.RUN, m_down: self.WATTACK,event_stop: self.IDLE},
+                self.IDLE: {event_touch: self.TOUCH, e_down: self.IDLE, q_down: self.WATTACK,event_run: self.RUN},
+                self.RUN: {event_touch: self.TOUCH, e_down: self.RUN, q_down: self.WATTACK,event_stop: self.IDLE},
                 self.WATTACK : { event_stop : self.IDLE},
                 self.TOUCH : { event_stop : self.IDLE}
             }
