@@ -1,5 +1,5 @@
 from pico2d import *
-from sdl2 import SDL_KEYUP, SDL_KEYDOWN, SDLK_RIGHT, SDLK_LEFT, SDLK_UP, SDLK_DOWN, SDLK_m, SDLK_n
+from sdl2 import *
 from state_machine import StateMachine
 from cookie import Cookie
 import game_world
@@ -28,10 +28,10 @@ def event_stop(e):
 def event_run(e):
     return e[0] == 'RUN'
 
-def m_down(e):
+def q_down(e):
     return e[0] == 'INPUT' and e[1].type == SDL_KEYDOWN and e[1].key == SDLK_m
 
-def n_down(e):
+def e_down(e):
     return e[0] == 'INPUT' and e[1].type == SDL_KEYDOWN and e[1].key == SDLK_n
 
 def event_touch(e):
@@ -190,25 +190,25 @@ class Chabear:
         game_data.player2_hp = self.hp
 
     def handle_event(self, event):
-        if event.key in (SDLK_LEFT, SDLK_RIGHT, SDLK_UP, SDLK_DOWN):
+        if event.key in (SDLK_a, SDLK_d, SDLK_w, SDLK_s):
             cur_xdir , cur_ydir = self.x_dir, self.y_dir
             if event.type == SDL_KEYDOWN:
-                if event.key == SDLK_RIGHT:
+                if event.key == SDLK_w:
                         self.x_dir += 1
-                elif event.key == SDLK_LEFT:
+                elif event.key == SDLK_a:
                         self.x_dir += -1
-                elif event.key == SDLK_UP:
+                elif event.key == SDLK_w:
                         self.y_dir += 1
-                elif event.key == SDLK_DOWN:
+                elif event.key == SDLK_s:
                         self.y_dir += -1
             elif event.type == SDL_KEYUP:
-                if event.key == SDLK_RIGHT:
+                if event.key == SDLK_d:
                     self.x_dir += -1
-                elif event.key == SDLK_LEFT:
+                elif event.key == SDLK_a:
                     self.x_dir += 1
-                elif event.key == SDLK_UP:
+                elif event.key == SDLK_w:
                     self.y_dir += -1
-                elif event.key == SDLK_DOWN:
+                elif event.key == SDLK_s:
                     self.y_dir += 1
             if cur_xdir != self.x_dir or cur_ydir != self.y_dir:
                 if self.x_dir == 0 and self.y_dir == 0:
