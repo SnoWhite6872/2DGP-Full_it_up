@@ -29,10 +29,10 @@ def event_run(e):
     return e[0] == 'RUN'
 
 def q_down(e):
-    return e[0] == 'INPUT' and e[1].type == SDL_KEYDOWN and e[1].key == SDLK_m
+    return e[0] == 'INPUT' and e[1].type == SDL_KEYDOWN and e[1].key == SDLK_q
 
 def e_down(e):
-    return e[0] == 'INPUT' and e[1].type == SDL_KEYDOWN and e[1].key == SDLK_n
+    return e[0] == 'INPUT' and e[1].type == SDL_KEYDOWN and e[1].key == SDLK_e
 
 def event_touch(e):
     return e[0] == 'TOUCH'
@@ -193,7 +193,7 @@ class Chabear:
         if event.key in (SDLK_a, SDLK_d, SDLK_w, SDLK_s):
             cur_xdir , cur_ydir = self.x_dir, self.y_dir
             if event.type == SDL_KEYDOWN:
-                if event.key == SDLK_w:
+                if event.key == SDLK_d:
                         self.x_dir += 1
                 elif event.key == SDLK_a:
                         self.x_dir += -1
