@@ -37,12 +37,15 @@ def init():
     global bgbasic
     global image_gameover
     global ice_tea
-    global char1, char2
+    global char1, char2, p1, p2
 
     Cha = [Chacat, Chabear]
 
     char1 = Cha[game_data.player_1]()
     char2 = Cha[game_data.player_2]()
+
+    p1 = PlayerOne(char1)
+    p2 = PlayerTwo(char2)
 
     image_gameover = load_image('game_over.png')
     bgbasic = BGbasic()
