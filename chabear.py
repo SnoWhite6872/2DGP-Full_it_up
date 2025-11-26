@@ -227,7 +227,7 @@ class Chabear:
 
     def throw_cookie(self):
         if self.cookie_count >0:
-            cookie = Cookie(self.x, self.y, self.f_dir * 25)
+            cookie = Cookie(self.x, self.y, self.f_dir * 25, self.f_dir)
             game_world.add_object(cookie, 1)
             self.cookie_count -= 1
 

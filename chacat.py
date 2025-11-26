@@ -229,7 +229,7 @@ class Chacat:
             self.state_machine.handle_state_event(('INPUT', event))
 
     def throw_cookie(self):
-        cookie = Cookie(self.x, self.y, self.f_dir * 25)
+        cookie = Cookie(self.x, self.y, self.f_dir * 25, self.f_dir)
         game_world.add_object(cookie, 1)
         #game_world.add_collision_pair('player:cookie', None, cookie)
         self.cookie_count -= 1
