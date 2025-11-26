@@ -7,7 +7,7 @@ class PlayerOne:
     def __init__(self, character_index):
         self.select_char = character_index
 
-    def handle_events(self, event):
+    def handle_event(self, event):
 
         self.select_char.handle_event(event)
 

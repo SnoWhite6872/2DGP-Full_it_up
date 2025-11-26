@@ -7,7 +7,7 @@ class PlayerTwo:
     def __init__(self, character_index):
         self.select_char = character_index
 
-    def handle_events(self, event):
+    def handle_event(self, event):
 
             if event.type == SDL_KEYDOWN:
                 if event.key == SDLK_UP:
