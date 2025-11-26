@@ -8,6 +8,8 @@ from bgluxury import BGluxury
 from item import Icetea
 import game_data
 import select_mod
+from player_one import PlayerOne
+from player_two import PlayerTwo
 
 import game_framework
 
@@ -35,8 +37,12 @@ def init():
     global bgbasic
     global image_gameover
     global ice_tea
+    global char1, char2
 
     Cha = [Chacat, Chabear]
+
+    char1 = Cha[game_data.player_1]()
+    char2 = Cha[game_data.player_2]()
 
     image_gameover = load_image('game_over.png')
     bgbasic = BGbasic()
@@ -45,10 +51,11 @@ def init():
         game_world.add_object(bgbasic, 0)
     elif game_data.select_mod == 1:
         game_world.add_object(bgluxury, 0)
-    chabear = Chabear()
-    game_world.add_object(chabear, 1)
-    chacat = Chacat()
-    game_world.add_object(chacat, 1)
+
+    # chabear = Chabear()
+    # game_world.add_object(chabear, 1)
+    # chacat = Chacat()
+    # game_world.add_object(chacat, 1)
     ice_tea = Icetea(1480//2, 1050//2)
     game_world.add_object(ice_tea)
     game_world.add_collision_pair('chabear:icetea', None, ice_tea)
