@@ -77,7 +77,6 @@ def spawn_item():
         ice_tea = Icetea()
         game_world.add_object(ice_tea, 1)
         game_world.add_collision_pair('player:icetea', None, ice_tea)
-        #game_world.add_collision_pair('chacat:icetea', None, ice_tea)
         timer = get_time()
 
 
