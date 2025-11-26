@@ -27,8 +27,8 @@ def handle_events():
         elif game_data.game_end == 1 and event.type == SDL_KEYDOWN and event.key ==SDLK_SPACE:
             game_framework.change_mode(select_mod)
         else:
-            chabear.handle_event(event)
-            chacat.handle_event(event)
+            p1.handle_event(event)
+            p2.handle_event(event)
     pass
 
 def init():
@@ -56,7 +56,7 @@ def init():
 
     #캐릭터 오브젝트 추가
     game_world.add_object(char1, 1)
-    game_world.add_object(char2, 2)
+    game_world.add_object(char2, 1)
 
     # chabear = Chabear()
     # game_world.add_object(chabear, 1)
