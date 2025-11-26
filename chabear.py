@@ -153,8 +153,8 @@ class Chabear:
         self.frame = 0
         self.load_time = get_time()
         self.cookie_count = 0
-        game_world.add_collision_pair('chabear:cookie', self, None)
-        game_world.add_collision_pair('chabear:icetea', self, None)
+        game_world.add_collision_pair('player:cookie', self, None)
+        game_world.add_collision_pair('player:icetea', self, None)
 
         self.font = load_font('ENCR10B.TTF', 16)
         self.RUN = Run(self)
@@ -229,16 +229,15 @@ class Chabear:
         if self.cookie_count >0:
             cookie = Cookie(self.x, self.y, self.f_dir * 25)
             game_world.add_object(cookie, 1)
-            game_world.add_collision_pair('chacat:cookie', None, cookie)
             self.cookie_count -= 1
 
         pass
 
     def handle_collision(self, group, other):
-        if group == 'chabear:cookie':
+        if group == 'player:cookie':
             self.hp += 10
             print('bear hp + 10')
             self.state_machine.handle_state_event(('TOUCH', None))
-        if group == 'chabear:icetea':
+        if group == 'player:icetea':
             self.hp -= 15
 

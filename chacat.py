@@ -155,8 +155,8 @@ class Chacat:
         self.cookie_count = 0
         self.load_time = get_time()
 
-        game_world.add_collision_pair('chacat:cookie', self, None)
-        game_world.add_collision_pair('chacat:icetea', self, None)
+        game_world.add_collision_pair('player:cookie', self, None)
+        game_world.add_collision_pair('player:icetea', self, None)
 
         self.TOUCH = Touch(self)
         self.font = load_font('ENCR10B.TTF', 16)
@@ -231,7 +231,8 @@ class Chacat:
     def throw_cookie(self):
         cookie = Cookie(self.x, self.y, self.f_dir * 25)
         game_world.add_object(cookie, 1)
-        game_world.add_collision_pair('chabear:cookie', None, cookie)
+        #game_world.add_collision_pair('player:cookie', None, cookie)
+        self.cookie_count -= 1
 
 
 
@@ -239,9 +240,9 @@ class Chacat:
         return self.x - 35, self.y - 60, self.x + 35, self.y + 40
 
     def handle_collision(self, group, other):
-        if group == 'chacat:cookie':
+        if group == 'player:cookie':
             self.hp += 10
             print('cat hp + 10')
             self.state_machine.handle_state_event(('TOUCH', None))
-        if group == 'chacat:icetea':
+        if group == 'player:icetea':
             self.hp -= 15
