@@ -39,8 +39,8 @@ def init():
 
     Cha = [Chacat, Chabear]
 
-    char1 = Cha[game_data.player_1]()
-    char2 = Cha[game_data.player_2]()
+    char1 = Cha[game_data.player_1](game_data.player1_x, game_data.player1_y)
+    char2 = Cha[game_data.player_2](game_data.player2_x, game_data.player2_y)
 
     p1 = PlayerOne(char1)
     p2 = PlayerTwo(char2)
