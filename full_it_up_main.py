@@ -64,7 +64,6 @@ def init():
     #충돌 관리
     game_world.add_collision_pair('player:player', char1, None)
     game_world.add_collision_pair('player:player', char2, None)
-    game_world.add_collision_pair('player:icetea', None, ice_tea)
     #game_world.add_collision_pair('chacat:icetea', None, ice_tea)
 
 
