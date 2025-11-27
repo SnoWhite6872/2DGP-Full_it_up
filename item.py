@@ -6,13 +6,17 @@ import random
 PIXEL_PER_METER = (1.0 / 0.03)
 
 class Icetea:
-    image = None
+    image_table = {'heal':'I_Ice01.png'}
 
-    def __init__(self, x=random.randint(0, 1400), y=random.randint(0, 1000)):
-        if Icetea.image == None:
-            Icetea.image = load_image('I_Ice01.png')
+    def __init__(self, effect,x=random.randint(0, 1400), y=random.randint(0, 1000)):
+        global image_table
+        self.effect = effect
+
+        if image_table[effect]:
+            self.image = load_image(image_table[effect])
         self.x = x
         self.y = y
+        game_world.add_collision_pair('player:icetea', None, self)
 
 
     def draw(self):
@@ -30,6 +34,6 @@ class Icetea:
         return self.x - 25, self.y - 25, self.x + 25, self.y + 25
 
     def handle_collision(self, group, other):
-        if group == 'player:icetea':
+        if group == 'player:item':
             game_world.remove_object(self)
 
