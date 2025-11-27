@@ -96,8 +96,7 @@ class Run:
         self.chabear = chabear
 
     def enter(self,e):
-        if self.chabear.x_dir != 0:                   #가로 방향이 0이 아니면 가로 방향은 시선 방향과 같다.
-            self.chabear.f_dir = self.chabear.x_dir
+        pass
 
 
     def exit(self,e):
@@ -106,6 +105,8 @@ class Run:
         pass
 
     def do(self):
+        if self.chabear.x_dir != 0:
+            self.chabear.f_dir = self.chabear.x_dir
         self.chabear.x += self.chabear.x_dir * RUN_SPEED_PPS * game_framework.frame_time
         self.chabear.y += self.chabear.y_dir * RUN_SPEED_PPS * game_framework.frame_time
         self.chabear.frame = (self.chabear.frame + FRAMES_PER_IDLE * ACTION_PER_TIME * game_framework.frame_time) % 2
@@ -143,10 +144,10 @@ class Idle:
 
 class Chabear:
     images = None
-    def __init__(self):
+    def __init__(self,x,y):
         self.hp = 0
         self.load_images()
-        self.x, self.y = 1380, 700
+        self.x, self.y = x, y
         self.x_dir = 0
         self.y_dir = 0
         self.f_dir = -1
@@ -214,7 +215,7 @@ class Chabear:
                 if self.x_dir == 0 and self.y_dir == 0:
                         self.state_machine.handle_state_event(('STOP', self.f_dir))
                 else:
-                        self.state_machine.handle_state_event(('RUN', None))
+                        self.state_machine.handle_state_event(('RUN', self.f_dir))
         else:
             self.state_machine.handle_state_event(('INPUT', event))
 

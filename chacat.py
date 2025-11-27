@@ -94,8 +94,7 @@ class Run:
             self.chacat = chacat
 
         def enter(self,e):
-            if self.chacat.x_dir != 0:
-                self.chacat.f_dir = self.chacat.x_dir
+            pass
 
         def exit(self,e):
             if e_down(e):
@@ -103,6 +102,8 @@ class Run:
             pass
 
         def do(self):
+            if self.chacat.x_dir != 0:
+                self.chacat.f_dir = self.chacat.x_dir
             self.chacat.x += self.chacat.x_dir * RUN_SPEED_PPS * game_framework.frame_time
             self.chacat.y += self.chacat.y_dir * RUN_SPEED_PPS * game_framework.frame_time
             self.chacat.frame = (self.chacat.frame + FRAMES_PER_IDLE * ACTION_PER_TIME * game_framework.frame_time) % 2
@@ -144,10 +145,10 @@ class Idle:
 
 class Chacat:
     images = None
-    def __init__(self):
+    def __init__(self,x,y):
         self.load_images()
         self.hp = 0
-        self.x, self.y = 100, 700
+        self.x, self.y = x,y
         self.x_dir = 0
         self.y_dir = 0
         self.f_dir = 1
@@ -224,7 +225,7 @@ class Chacat:
                 if self.x_dir == 0 and self.y_dir == 0:
                         self.state_machine.handle_state_event(('STOP', self.f_dir))
                 else:
-                        self.state_machine.handle_state_event(('RUN', None))
+                        self.state_machine.handle_state_event(('RUN', self.f_dir))
         else:
             self.state_machine.handle_state_event(('INPUT', event))
 
