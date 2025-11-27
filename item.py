@@ -5,18 +5,18 @@ import random
 
 PIXEL_PER_METER = (1.0 / 0.03)
 
-class Icetea:
+class Item:
     image_table = {'heal':'I_Ice01.png'}
 
     def __init__(self, effect,x=random.randint(0, 1400), y=random.randint(0, 1000)):
-        global image_table
         self.effect = effect
 
-        if image_table[effect]:
-            self.image = load_image(image_table[effect])
+        if self.image_table[effect]:
+            self.image = load_image(Item.image_table[effect])
+
         self.x = x
         self.y = y
-        game_world.add_collision_pair('player:icetea', None, self)
+        game_world.add_collision_pair('player:item', None, self)
 
 
     def draw(self):
