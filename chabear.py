@@ -155,7 +155,7 @@ class Chabear:
         self.load_time = get_time()
         self.cookie_count = 0
         game_world.add_collision_pair('player:cookie', self, None)
-        game_world.add_collision_pair('player:icetea', self, None)
+        game_world.add_collision_pair('player:item', self, None)
 
         self.font = load_font('ENCR10B.TTF', 16)
         self.RUN = Run(self)
@@ -239,6 +239,6 @@ class Chabear:
             self.hp += 10
             print('bear hp + 10')
             self.state_machine.handle_state_event(('TOUCH', None))
-        if group == 'player:icetea':
+        if group == 'player:item':
             self.hp -= 15
 
