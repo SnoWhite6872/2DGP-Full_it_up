@@ -70,7 +70,7 @@ def init():
 def spawn_item():
     global timer
 
-    item_effects = ['heal', 'speed']
+    item_effects = ['heal', 'speed', 'damage']
     if get_time() - timer > 2:
         item_random = choice(item_effects)
         item = Item(item_random)

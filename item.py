@@ -7,7 +7,7 @@ import game_data
 PIXEL_PER_METER = (1.0 / 0.03)
 
 class Item:
-    image_table = {'heal':'I_Ice01.png', 'speed': 'I_pack_milktea.png'}
+    image_table = {'heal':'I_Ice01.png', 'speed': 'I_pack_milktea.png', 'damage': 'I_syrup_sugar.png'}
 
     def __init__(self, effect, x = None, y = None):
         self.effect = effect
