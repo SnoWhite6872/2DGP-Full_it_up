@@ -6,13 +6,17 @@ import random
 PIXEL_PER_METER = (1.0 / 0.03)
 
 class Item:
-    image_table = {'heal':'I_Ice01.png'}
+    image_table = {'heal':'I_Ice01.png', 'speed': 'I_pack_milktea.png'}
 
-    def __init__(self, effect,x=random.randint(0, 1400), y=random.randint(0, 1000)):
+    def __init__(self, effect, x = None, y = None):
         self.effect = effect
 
         if self.image_table[effect]:
             self.image = load_image(Item.image_table[effect])
+        if x is None:
+            x = random.randint(0,1480)
+        if y is None:
+            y = random.randint(0,1050)
 
         self.x = x
         self.y = y
