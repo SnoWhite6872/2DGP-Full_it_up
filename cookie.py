@@ -6,12 +6,13 @@ PIXEL_PER_METER = (1.0 / 0.03)
 class Cookie:
     image = None
 
-    def __init__(self, x, y, speed=25, dir=0):
+    def __init__(self, x, y, speed=25, dir=0, owner = None):
         if Cookie.image == None:
             Cookie.image = load_image('I_Cookie03.png')
         self.x = x + 60*dir
         self.y = y
         self.speed = speed
+        self.owner = owner
         game_world.add_collision_pair('player:cookie', None, self)
 
     def draw(self):
