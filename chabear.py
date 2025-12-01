@@ -158,6 +158,8 @@ class Chabear:
         self.frame = 0
         self.speed_boost = False
         self.speed_boost_time = 0
+        self.damage_a = False
+        self.damage_time = 0
         self.load_time = get_time()
         self.cookie_count = 0
         game_world.add_collision_pair('player:cookie', self, None)
@@ -197,6 +199,8 @@ class Chabear:
         game_data.player2_hp = self.hp
         if self.speed_boost and (get_time() - self.speed_boost_time) > 10:
             self.speed_boost = False
+        if self.damage_a and (get_time() - self.damage_time) > 10:
+            self.damage_a = False
 
     def handle_event(self, event):
         if event.key in (SDLK_a, SDLK_d, SDLK_w, SDLK_s):
@@ -236,7 +240,7 @@ class Chabear:
 
     def throw_cookie(self):
         if self.cookie_count >0:
-            cookie = Cookie(self.x, self.y, self.f_dir * 25, self.f_dir)
+            cookie = Cookie(self.x, self.y, self.f_dir * 25, self.f_dir, self)
             game_world.add_object(cookie, 1)
             self.cookie_count -= 1
 
@@ -245,10 +249,18 @@ class Chabear:
         self.speed_boost = True
         self.speed_boost_time = get_time()
 
+    def damage_plus(self):
+        self.damage_a = True
+        self.damage_time = get_time()
+        pass
+
 
     def handle_collision(self, group, other):
         if group == 'player:cookie':
-            self.hp += 10
+            damage = 10
+            if other.owner.damage_a:
+                damage = 20
+            self.hp += damage
             print('bear hp + 10')
             self.state_machine.handle_state_event(('TOUCH', None))
         if group == 'player:item':
@@ -256,4 +268,7 @@ class Chabear:
                 self.hp -= 15
             elif other.effect == 'speed':
                 self.speed_booster()
+            elif other.effect == 'damage':
+                self.damage_plus()
+
                 pass

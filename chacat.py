@@ -161,6 +161,8 @@ class Chacat:
         self.cookie_count = 0
         self.speed_boost = False
         self.speed_boost_time = 0
+        self.damage_a = False
+        self.damage_time = 0
         self.load_time = get_time()
 
         game_world.add_collision_pair('player:cookie', self, None)
@@ -201,6 +203,9 @@ class Chacat:
         game_data.player1_hp = self.hp
         if self.speed_boost and (get_time() - self.speed_boost_time) > 10:
             self.speed_boost = False
+        if self.damage_a and (get_time() - self.damage_time) > 100:
+            self.damage_a = False
+
         pass
 
     def draw(self):
@@ -239,7 +244,7 @@ class Chacat:
             self.state_machine.handle_state_event(('INPUT', event))
 
     def throw_cookie(self):
-        cookie = Cookie(self.x, self.y, self.f_dir * 25, self.f_dir)
+        cookie = Cookie(self.x, self.y, self.f_dir * 25, self.f_dir, self)
         game_world.add_object(cookie, 1)
         #game_world.add_collision_pair('player:cookie', None, cookie)
         self.cookie_count -= 1
@@ -249,12 +254,21 @@ class Chacat:
         self.speed_boost_time = get_time()
 
 
+    def damage_plus(self):
+        self.damage_a = True
+        self.damage_time = get_time()
+        pass
+
+
     def get_bb(self):
         return self.x - 35, self.y - 60, self.x + 35, self.y + 40
 
     def handle_collision(self, group, other):
         if group == 'player:cookie':
-            self.hp += 10
+            damage = 10
+            if other.owner.damage_a:
+                damage = 20
+            self.hp += damage
             print('cat hp + 10')
             self.state_machine.handle_state_event(('TOUCH', None))
         if group == 'player:item':
@@ -262,4 +276,6 @@ class Chacat:
                 self.hp -= 15
             elif other.effect == 'speed':
                 self.speed_booster()
+            elif other.effect == 'damage':
+                self.damage_plus()
                 pass
