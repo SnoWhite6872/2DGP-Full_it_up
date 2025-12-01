@@ -23,7 +23,7 @@ def event_touch(e):
     return e[0] == 'TOUCH'
 
 PIXEL_PER_METER = (1.0 / 0.03)  # 10픽셀 30센치미터
-RUN_SPEED_KMPH = 50.0  # 시속 20킬로미터
+RUN_SPEED_KMPH = 50.0  # 시속 50킬로미터
 RUN_SPEED_MPM = (RUN_SPEED_KMPH * 1000.0 / 60.0) # 분속
 RUN_SPEED_MPS = (RUN_SPEED_MPM / 60.0)        # 초속
 RUN_SPEED_PPS = (RUN_SPEED_MPS * PIXEL_PER_METER)  #달리기 픽셀 속도
@@ -102,10 +102,15 @@ class Run:
             pass
 
         def do(self):
+            speed = RUN_SPEED_PPS
+
+            if self.chacat.speed_boost:
+                speed *= 2
+
             if self.chacat.x_dir != 0:
                 self.chacat.f_dir = self.chacat.x_dir
-            self.chacat.x += self.chacat.x_dir * RUN_SPEED_PPS * game_framework.frame_time
-            self.chacat.y += self.chacat.y_dir * RUN_SPEED_PPS * game_framework.frame_time
+            self.chacat.x += self.chacat.x_dir * speed * game_framework.frame_time
+            self.chacat.y += self.chacat.y_dir * speed * game_framework.frame_time
             self.chacat.frame = (self.chacat.frame + FRAMES_PER_IDLE * ACTION_PER_TIME * game_framework.frame_time) % 2
 
             pass
@@ -154,6 +159,8 @@ class Chacat:
         self.f_dir = 1
         self.frame = 0
         self.cookie_count = 0
+        self.speed_boost = False
+        self.speed_boost_time = 0
         self.load_time = get_time()
 
         game_world.add_collision_pair('player:cookie', self, None)
@@ -192,6 +199,8 @@ class Chacat:
         if self.hp <= 0:
             self.hp = 0
         game_data.player1_hp = self.hp
+        if self.speed_boost and (get_time() - self.speed_boost_time) > 100:
+            self.speed_boost = False
         pass
 
     def draw(self):
@@ -235,6 +244,11 @@ class Chacat:
         #game_world.add_collision_pair('player:cookie', None, cookie)
         self.cookie_count -= 1
 
+    def speed_booster(self):
+        self.speed_boost = True
+        self.speed_boost_time = get_time()
+
+
 
 
     def get_bb(self):
@@ -246,4 +260,8 @@ class Chacat:
             print('cat hp + 10')
             self.state_machine.handle_state_event(('TOUCH', None))
         if group == 'player:item':
-            self.hp -= 15
+            if other.effect == 'heal':
+                self.hp -= 15
+            elif other.effect == 'speed':
+                self.speed_booster()
+                pass
