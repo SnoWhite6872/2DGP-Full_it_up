@@ -5,7 +5,8 @@ from bgbasic import BGbasic
 from chabear import Chabear
 from chacat import Chacat
 from bgluxury import BGluxury
-from item import Icetea
+from item import Item
+from random import choice
 import game_data
 import select_mod
 from player_one import PlayerOne
@@ -34,7 +35,6 @@ def handle_events():
 def init():
     global chabear, chacat
     global image_gameover
-    global ice_tea
     global char1, char2, p1, p2
 
     Cha = [Chacat, Chabear]
@@ -58,8 +58,6 @@ def init():
     game_world.add_object(char1, 1)
     game_world.add_object(char2, 1)
 
-    ice_tea = Icetea(1480//2, 1050//2)
-    game_world.add_object(ice_tea,1)
 
     #충돌 관리
     game_world.add_collision_pair('player:player', char1, None)
@@ -70,12 +68,14 @@ def init():
     pass
 
 def spawn_item():
-    global timer, ice_tea
+    global timer
 
-    if get_time() - timer > 10:
-        ice_tea = Icetea()
-        game_world.add_object(ice_tea, 1)
-        game_world.add_collision_pair('player:icetea', None, ice_tea)
+    item_effects = ['heal', 'speed']
+    if get_time() - timer > 2:
+        item_random = choice(item_effects)
+        item = Item(item_random)
+        game_world.add_object(item, 1)
+
         timer = get_time()
 
 
