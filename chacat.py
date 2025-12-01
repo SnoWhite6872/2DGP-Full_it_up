@@ -199,7 +199,7 @@ class Chacat:
         if self.hp <= 0:
             self.hp = 0
         game_data.player1_hp = self.hp
-        if self.speed_boost and (get_time() - self.speed_boost_time) > 100:
+        if self.speed_boost and (get_time() - self.speed_boost_time) > 10:
             self.speed_boost = False
         pass
 
@@ -247,8 +247,6 @@ class Chacat:
     def speed_booster(self):
         self.speed_boost = True
         self.speed_boost_time = get_time()
-
-
 
 
     def get_bb(self):

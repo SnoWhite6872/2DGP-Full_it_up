@@ -105,10 +105,14 @@ class Run:
         pass
 
     def do(self):
+        speed = RUN_SPEED_PPS
+
+        if self.chabear.speed_boost:
+            speed *= 2
         if self.chabear.x_dir != 0:
             self.chabear.f_dir = self.chabear.x_dir
-        self.chabear.x += self.chabear.x_dir * RUN_SPEED_PPS * game_framework.frame_time
-        self.chabear.y += self.chabear.y_dir * RUN_SPEED_PPS * game_framework.frame_time
+        self.chabear.x += self.chabear.x_dir * speed * game_framework.frame_time
+        self.chabear.y += self.chabear.y_dir * speed * game_framework.frame_time
         self.chabear.frame = (self.chabear.frame + FRAMES_PER_IDLE * ACTION_PER_TIME * game_framework.frame_time) % 2
         pass
 
@@ -152,6 +156,8 @@ class Chabear:
         self.y_dir = 0
         self.f_dir = -1
         self.frame = 0
+        self.speed_boost = False
+        self.speed_boost_time = 0
         self.load_time = get_time()
         self.cookie_count = 0
         game_world.add_collision_pair('player:cookie', self, None)
@@ -189,6 +195,8 @@ class Chabear:
         if self.hp <= 0:
             self.hp = 0
         game_data.player2_hp = self.hp
+        if self.speed_boost and (get_time() - self.speed_boost_time) > 10:
+            self.speed_boost = False
 
     def handle_event(self, event):
         if event.key in (SDLK_a, SDLK_d, SDLK_w, SDLK_s):
@@ -232,7 +240,11 @@ class Chabear:
             game_world.add_object(cookie, 1)
             self.cookie_count -= 1
 
-        pass
+
+    def speed_booster(self):
+        self.speed_boost = True
+        self.speed_boost_time = get_time()
+
 
     def handle_collision(self, group, other):
         if group == 'player:cookie':
@@ -240,5 +252,8 @@ class Chabear:
             print('bear hp + 10')
             self.state_machine.handle_state_event(('TOUCH', None))
         if group == 'player:item':
-            self.hp -= 15
-
+            if other.effect == 'heal':
+                self.hp -= 15
+            elif other.effect == 'speed':
+                self.speed_booster()
+                pass
