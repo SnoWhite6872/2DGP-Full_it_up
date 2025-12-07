@@ -16,10 +16,10 @@ RUN_SPEED_PPS = (RUN_SPEED_MPS * PIXEL_PER_METER)  #달리기 픽셀 속도
 
 TIME_PER_ACTION = 1.0         #1초 액션 당 걸리는 시간
 ACTION_PER_TIME = 1.0 / TIME_PER_ACTION
-FRAMES_PER_IDLE = 5
+FRAMES_PER_IDLE = 3
 FRAMES_PER_TOUCH = 5
 
-bear_animation_names = ['Idle', 'Run', 'Touch']
+bear_animation_names = {'Idle':2 , 'Run':2 , 'Touch' : 2}
 
 
 def event_stop(e):
@@ -185,8 +185,12 @@ class Chabear:
     def load_images(self):
         if Chabear.images == None:
             Chabear.images = {}
-            for name in bear_animation_names:
-                Chabear.images[name] = [load_image("./Cha_bear/" + name + " (%d)" % i + ".png") for i in range(1, 3)]
+            for name, count in bear_animation_names.items():
+                Chabear.images[name] = [
+                    load_image(f"./Cha_bear/{name} ({i}).png") for i in range(1, count + 1)
+                ]
+            # for name in bear_animation_names:
+            #     Chabear.images[name] = [load_image("./Cha_bear/" + name + " (%d)" % i + ".png") for i in range(1, 4)]
 
 
     def update(self):

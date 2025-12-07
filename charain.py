@@ -33,11 +33,11 @@ ACTION_PER_TIME = 1.0 / TIME_PER_ACTION
 FRAMES_PER_IDLE = 5
 FRAMES_PER_TOUCH = 5
 
-cat_animation_names = ['Idle', 'Run', 'Touch']
+rain_animation_names = ['Idle', 'Run', 'Touch']
 
 class Touch:
-    def __init__(self, chacat):
-        self.chacat = chacat
+    def __init__(self, charain):
+        self.charain = charain
         self.time =0
 
     def enter(self, e):
@@ -47,108 +47,108 @@ class Touch:
         pass
 
     def do(self):
-        self.chacat.frame = (self.chacat.frame + FRAMES_PER_TOUCH * ACTION_PER_TIME * game_framework.frame_time) % 2
+        self.charain.frame = (self.charain.frame + FRAMES_PER_TOUCH * ACTION_PER_TIME * game_framework.frame_time) % 2
         if get_time() - self.time >= 1:
-            self.chacat.state_machine.handle_state_event(('STOP', None))
+            self.charain.state_machine.handle_state_event(('STOP', None))
         pass
 
     def draw(self):
-        if self.chacat.f_dir == -1:
-            self.chacat.images['Touch'][1].draw(self.chacat.x, self.chacat.y, 100, 120)
+        if self.charain.f_dir == -1:
+            self.charain.images['Touch'][1].draw(self.charain.x, self.charain.y, 100, 120)
         else:
-            self.chacat.images['Touch'][1].composite_draw(0, 'h',self.chacat.x, self.chacat.y, 100, 120)
+            self.charain.images['Touch'][1].composite_draw(0, 'h',self.charain.x, self.charain.y, 100, 120)
 
 class WAttack:
-        def __init__(self, chacat):
-            self.chacat = chacat
+        def __init__(self, charain):
+            self.charain = charain
             self.timer = 0
 
         def enter(self,e):
-            if self.chacat.x_dir != 0:
-                self.chacat.f_dir = self.chacat.x_dir
+            if self.charain.x_dir != 0:
+                self.charain.f_dir = self.charain.x_dir
             self.timer = 300
 
         def exit(self,e):
             pass
 
         def do(self):
-            self.chacat.x += self.chacat.x_dir * RUN_SPEED_PPS * game_framework.frame_time
-            self.chacat.y += self.chacat.y_dir * RUN_SPEED_PPS * game_framework.frame_time
+            self.charain.x += self.charain.x_dir * RUN_SPEED_PPS * game_framework.frame_time
+            self.charain.y += self.charain.y_dir * RUN_SPEED_PPS * game_framework.frame_time
             self.timer -= 1
             if self.timer <= 0:
-                self.chacat.state_machine.handle_state_event(('RUN', None))
+                self.charain.state_machine.handle_state_event(('RUN', None))
 
-            self.chacat.frame = (self.chacat.frame + FRAMES_PER_IDLE * ACTION_PER_TIME * game_framework.frame_time) % 2
+            self.charain.frame = (self.charain.frame + FRAMES_PER_IDLE * ACTION_PER_TIME * game_framework.frame_time) % 2
 
         def draw(self):
-            if self.chacat.f_dir == -1:
-                self.chacat.images['Touch'][int(self.chacat.frame)].draw(self.chacat.x, self.chacat.y, 100, 120)
+            if self.charain.f_dir == -1:
+                self.charain.images['Touch'][int(self.charain.frame)].draw(self.charain.x, self.charain.y, 100, 120)
             else:
-                self.chacat.images['Touch'][int(self.chacat.frame)].composite_draw(0, 'h', self.chacat.x, self.chacat.y,100, 120)
+                self.charain.images['Touch'][int(self.charain.frame)].composite_draw(0, 'h', self.charain.x, self.charain.y,100, 120)
             pass
 
 
 
 class Run:
-        def __init__(self, chacat):
-            self.chacat = chacat
+        def __init__(self, charain):
+            self.charain = charain
 
         def enter(self,e):
             pass
 
         def exit(self,e):
             if e_down(e):
-                self.chacat.throw_cookie()
+                self.charain.throw_cookie()
             pass
 
         def do(self):
             speed = RUN_SPEED_PPS
 
-            if self.chacat.speed_boost:
+            if self.charain.speed_boost:
                 speed *= 2
 
-            if self.chacat.x_dir != 0:
-                self.chacat.f_dir = self.chacat.x_dir
-            self.chacat.x += self.chacat.x_dir * speed * game_framework.frame_time
-            self.chacat.y += self.chacat.y_dir * speed * game_framework.frame_time
-            self.chacat.frame = (self.chacat.frame + FRAMES_PER_IDLE * ACTION_PER_TIME * game_framework.frame_time) % 2
+            if self.charain.x_dir != 0:
+                self.charain.f_dir = self.charain.x_dir
+            self.charain.x += self.charain.x_dir * speed * game_framework.frame_time
+            self.charain.y += self.charain.y_dir * speed * game_framework.frame_time
+            self.charain.frame = (self.charain.frame + FRAMES_PER_IDLE * ACTION_PER_TIME * game_framework.frame_time) % 2
 
             pass
 
         def draw(self):
-            if self.chacat.f_dir == -1:
-                self.chacat.images['Run'][int(self.chacat.frame)].draw(self.chacat.x, self.chacat.y, 100, 120)
+            if self.charain.f_dir == -1:
+                self.charain.images['Run'][int(self.charain.frame)].draw(self.charain.x, self.charain.y, 100, 120)
             else:
-                self.chacat.images['Run'][int(self.chacat.frame)].composite_draw(0, 'h', self.chacat.x, self.chacat.y,100, 120)
+                self.charain.images['Run'][int(self.charain.frame)].composite_draw(0, 'h', self.charain.x, self.charain.y,100, 120)
 
 
 class Idle:
-    def __init__(self, chacat):
-        self.chacat = chacat
+    def __init__(self, charain):
+        self.charain = charain
 
 
     def enter(self,e):
         if event_stop(e):
-            self.chacat.f_dir = e[1]
+            self.charain.f_dir = e[1]
         pass
 
     def exit(self,e):
         if e_down(e):
-            self.chacat.throw_cookie()
+            self.charain.throw_cookie()
         pass
 
     def do(self):
-        self.chacat.frame = (self.chacat.frame + FRAMES_PER_IDLE * ACTION_PER_TIME * game_framework.frame_time) % 2
+        self.charain.frame = (self.charain.frame + FRAMES_PER_IDLE * ACTION_PER_TIME * game_framework.frame_time) % 2
         pass
 
     def draw(self):
-        if self.chacat.f_dir == -1:
-            self.chacat.images['Idle'][int(self.chacat.frame)].draw(self.chacat.x, self.chacat.y, 100, 120)
+        if self.charain.f_dir == -1:
+            self.charain.images['Idle'][int(self.charain.frame)].draw(self.charain.x, self.charain.y, 100, 120)
         else:
-            self.chacat.images['Idle'][int(self.chacat.frame)].composite_draw(0, 'h',self.chacat.x, self.chacat.y, 100, 120)
+            self.charain.images['Idle'][int(self.charain.frame)].composite_draw(0, 'h',self.charain.x, self.charain.y, 100, 120)
         pass
 
-class Chacat:
+class Charain:
     images = None
     def __init__(self,x,y):
         self.load_images()
@@ -156,7 +156,7 @@ class Chacat:
         self.x, self.y = x,y
         self.x_dir = 0
         self.y_dir = 0
-        self.f_dir = -1
+        self.f_dir = 1
         self.frame = 0
         self.cookie_count = 0
         self.speed_boost = False
@@ -187,10 +187,10 @@ class Chacat:
         pass
 
     def load_images(self):
-        if Chacat.images == None:
-            Chacat.images = {}
-            for name in cat_animation_names:
-                Chacat.images[name] = [load_image("./Cha_cat/" + name + " (%d)" % i + ".png") for i in range(1, 3)]
+        if Charain.images == None:
+            Charain.images = {}
+            for name in rain_animation_names:
+                Charain.images[name] = [load_image("./Cha_rain/" + name + " (%d)" % i + ".png") for i in range(1, 3)]
 
 
     def update(self):

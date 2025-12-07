@@ -4,6 +4,7 @@ import game_world
 from bgbasic import BGbasic
 from chabear import Chabear
 from chacat import Chacat
+from charain import Charain
 from bgluxury import BGluxury
 from item import Item
 from random import choice
@@ -33,11 +34,11 @@ def handle_events():
     pass
 
 def init():
-    global chabear, chacat
+    global chabear, chacat, charain
     global image_gameover
     global char1, char2, p1, p2
 
-    Cha = [Chacat, Chabear]
+    Cha = [Chacat, Chabear, Charain]
 
     char1 = Cha[game_data.player_1](game_data.player1_x, game_data.player1_y)
     char2 = Cha[game_data.player_2](game_data.player2_x, game_data.player2_y)

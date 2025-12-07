@@ -10,9 +10,10 @@ sele_1 = None
 sele_2 = None
 cc = None
 cb = None
+cr = None
 
 def init():
-    global map, image0, image1, cc, cb, player1, player2, sele_1, sele_2,ccs, cbs
+    global map, image0, image1, cc, cb, cr, player1, player2, sele_1, sele_2,ccs, cbs, crs
     player1 = 0
     player2 = 0
     map = 0
@@ -24,13 +25,15 @@ def init():
     image1 = load_image('BG_luxury.png')
     cc = load_image('Cha_cat.png')
     cb = load_image('Cha_bear.png')
+    cr = load_image('Cha_rain.png')
     ccs = load_image('Cha_cat_sel.png')
     cbs = load_image('Cha_bear_sel.png')
+    crs = load_image('Cha_rain_sel.png')
     pass
 
 def finish():
-    global image0, image1, cc, cb, ccs, cbs
-    del image0, image1, cc, cb, ccs, cbs
+    global image0, image1, cc, cb, cr, ccs, cbs, crs
+    del image0, image1, cc, cb, cr, ccs, cbs, crs
     pass
 
 def update():
@@ -44,21 +47,29 @@ def draw():
     elif map == 1:
         image1.draw(1480//2, 1050//2)
 
-    ccs.draw(740, 100, 100, 100)
-    cbs.draw(940, 100, 100, 100)
+    ccs.draw(540, 100, 100, 100)
+    cbs.draw(740, 100, 100, 100)
+    crs.draw(940, 100, 100, 100)
+
 
     if player1 == 0:
         cc.draw(100, 700)
-        sele_1.draw(740, 100)
+        sele_1.draw(540, 100)
     elif player1 == 1:
         cb.draw(100, 700)
+        sele_1.draw(740, 100)
+    elif player1 == 2:
+        cr.draw(100, 700, 100, 120)
         sele_1.draw(940, 100)
 
     if player2 == 0:
         cc.draw(1380, 700)
-        sele_2.draw(740, 100)
+        sele_2.draw(540, 100)
     elif player2 == 1:
         cb.draw(1380, 700)
+        sele_2.draw(740, 100)
+    elif player2 == 2:
+        cr.draw(1380, 700, 100, 120)
         sele_2.draw(940, 100)
 
 
@@ -79,19 +90,19 @@ def handle_events():
             if event.key == SDLK_ESCAPE:
                 game_framework.quit()
             if event.key == SDLK_d:
-                player1 = (player1 + 1) % 2
+                player1 = (player1 + 1) % 3
             if event.key == SDLK_a:
                 if player1 == 0:
                     player1 = 1
                 else:
-                    player1 = (player1 - 1) % 2
+                    player1 = (player1 - 1) % 3
             if event.key == SDLK_RIGHT:
-                player2 = (player2 + 1) % 2
+                player2 = (player2 + 1) % 3
             if event.key == SDLK_LEFT:
                 if player2 == 0:
                     player2 = 1
                 else:
-                    player2 = (player2 - 1) % 2
+                    player2 = (player2 - 1) % 3
             if event.key == SDLK_SPACE:
                 game_data.select_mod = map
                 game_data.player_1 = player1
