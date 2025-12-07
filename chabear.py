@@ -85,10 +85,9 @@ class WAttack:
 
         def draw(self):
             if self.chabear.f_dir == -1:
-                self.chabear.images['Touch'][int(self.chabear.frame)].draw(self.chabear.x, self.chabear.y, 100, 120)
+                self.chabear.images['Touch'][1].draw(self.chabear.x, self.chabear.y, 100, 120)
             else:
-                self.chabear.images['Touch'][int(self.chabear.frame)].composite_draw(0, 'h', self.chabear.x,
-                                                                                   self.chabear.y, 100, 120)
+                self.chabear.images['Touch'][1].composite_draw(0, 'h', self.chabear.x, self.chabear.y, 100, 120)
             pass
 
 class Run:

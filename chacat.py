@@ -66,25 +66,25 @@ class WAttack:
         def enter(self,e):
             if self.chacat.x_dir != 0:
                 self.chacat.f_dir = self.chacat.x_dir
-            self.timer = 300
+            self.timer = get_time()
+
 
         def exit(self,e):
             pass
 
         def do(self):
-            self.chacat.x += self.chacat.x_dir * RUN_SPEED_PPS * game_framework.frame_time
-            self.chacat.y += self.chacat.y_dir * RUN_SPEED_PPS * game_framework.frame_time
-            self.timer -= 1
-            if self.timer <= 0:
-                self.chacat.state_machine.handle_state_event(('RUN', None))
+            # self.chacat.x += self.chacat.x_dir * RUN_SPEED_PPS * game_framework.frame_time
+            # self.chacat.y += self.chacat.y_dir * RUN_SPEED_PPS * game_framework.frame_time
+            if get_time() - self.timer >= 1.5:
+                self.chacat.state_machine.handle_state_event(('STOP', self.chacat.f_dir))
 
             self.chacat.frame = (self.chacat.frame + FRAMES_PER_IDLE * ACTION_PER_TIME * game_framework.frame_time) % 2
 
         def draw(self):
             if self.chacat.f_dir == -1:
-                self.chacat.images['Touch'][int(self.chacat.frame)].draw(self.chacat.x, self.chacat.y, 100, 120)
+                self.chacat.images['Touch'][1].draw(self.chacat.x, self.chacat.y, 100, 120)
             else:
-                self.chacat.images['Touch'][int(self.chacat.frame)].composite_draw(0, 'h', self.chacat.x, self.chacat.y,100, 120)
+                self.chacat.images['Touch'][1].composite_draw(0, 'h', self.chacat.x, self.chacat.y,100, 120)
             pass
 
 
