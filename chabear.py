@@ -2,6 +2,7 @@ from pico2d import *
 from sdl2 import *
 from state_machine import StateMachine
 from cookie import Cookie
+from attack import Attack
 import game_world
 import game_framework
 import game_data
@@ -21,6 +22,7 @@ FRAMES_PER_TOUCH = 5
 
 bear_animation_names = {'Idle':2 , 'Run':2 , 'Touch' : 2}
 
+time_out = lambda e: e[0] == 'TIMEOUT'
 
 def event_stop(e):
     return e[0] == 'STOP'
@@ -52,7 +54,7 @@ class Touch:
     def do(self):
         self.chabear.frame = (self.chabear.frame + FRAMES_PER_TOUCH * ACTION_PER_TIME * game_framework.frame_time) % 2
         if get_time() - self.time >= 1:
-            self.chabear.state_machine.handle_state_event(('STOP', None))
+            self.chabear.state_machine.handle_state_event(('STOP', self.chabear.f_dir))
         pass
 
     def draw(self):
@@ -70,7 +72,8 @@ class WAttack:
             if self.chabear.x_dir != 0:
                 self.chabear.f_dir = self.chabear.x_dir
 
-            self.timer = 300
+            self.timer = get_time()
+            self.chabear.attack()
 
         def exit(self, e):
             pass
@@ -79,15 +82,15 @@ class WAttack:
             # self.chabear.x += self.chabear.x_dir * RUN_SPEED_PPS * game_framework.frame_time
             # self.chabear.y += self.chabear.y_dir * RUN_SPEED_PPS * game_framework.frame_time
             self.chabear.frame = (self.chabear.frame + FRAMES_PER_IDLE * ACTION_PER_TIME * game_framework.frame_time) % 2
-            self.timer -= 1
-            if self.timer <= 0:
-                self.chabear.state_machine.handle_state_event(('STOP', None))
+
+            if get_time() - self.timer >= 1.0:
+                self.chabear.state_machine.handle_state_event(('TIMEOUT', self.chabear.f_dir))
 
         def draw(self):
             if self.chabear.f_dir == -1:
-                self.chabear.images['Touch'][1].draw(self.chabear.x, self.chabear.y, 100, 120)
+                self.chabear.images['Run'][1].draw(self.chabear.x, self.chabear.y, 100, 120)
             else:
-                self.chabear.images['Touch'][1].composite_draw(0, 'h', self.chabear.x, self.chabear.y, 100, 120)
+                self.chabear.images['Run'][1].composite_draw(0, 'h', self.chabear.x, self.chabear.y, 100, 120)
             pass
 
 class Run:
@@ -161,6 +164,7 @@ class Chabear:
         self.damage_time = 0
         self.load_time = get_time()
         self.cookie_count = 0
+        game_world.add_collision_pair('player:attack', self, None)
         game_world.add_collision_pair('player:cookie', self, None)
         game_world.add_collision_pair('player:item', self, None)
 
@@ -176,7 +180,7 @@ class Chabear:
 
                 self.IDLE: {event_touch: self.TOUCH, e_down: self.IDLE, q_down: self.WATTACK,event_run: self.RUN},
                 self.RUN: {event_touch: self.TOUCH, e_down: self.RUN, q_down: self.WATTACK,event_stop: self.IDLE},
-                self.WATTACK : { event_stop : self.IDLE},
+                self.WATTACK : { time_out : self.IDLE},
                 self.TOUCH : { event_stop : self.IDLE}
             }
         )
@@ -204,6 +208,9 @@ class Chabear:
             self.speed_boost = False
         if self.damage_a and (get_time() - self.damage_time) > 10:
             self.damage_a = False
+
+        self.x = clamp(20 , self.x , 1460)
+        self.y = clamp(20 , self.y , 1030)
 
     def handle_event(self, event):
         if event.key in (SDLK_a, SDLK_d, SDLK_w, SDLK_s):
@@ -247,6 +254,9 @@ class Chabear:
             game_world.add_object(cookie, 1)
             self.cookie_count -= 1
 
+    def attack(self):
+        attack = Attack(self.x, self.y, self.f_dir, self)
+        game_world.add_object(attack,1)
 
     def speed_booster(self):
         self.speed_boost = True
@@ -265,7 +275,8 @@ class Chabear:
                 damage = 20
             self.hp += damage
             print('bear hp + 10')
-            self.state_machine.handle_state_event(('TOUCH', None))
+            self.state_machine.handle_state_event(('TOUCH', self.f_dir))
+
         if group == 'player:item':
             if other.effect == 'heal':
                 self.hp -= 15
@@ -274,4 +285,10 @@ class Chabear:
             elif other.effect == 'damage':
                 self.damage_plus()
 
-                pass
+        if group == 'player:attack':
+            damage = 10
+            if other.owner.damage_a:
+                damage = 20
+            self.hp += damage
+            print('cat hp + 10')
+            self.state_machine.handle_state_event(('TOUCH', self.f_dir))
