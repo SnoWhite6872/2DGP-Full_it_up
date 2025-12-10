@@ -87,7 +87,7 @@ class WAttack:
             # self.chabear.y += self.chabear.y_dir * RUN_SPEED_PPS * game_framework.frame_time
             self.chabear.frame = (self.chabear.frame + FRAMES_PER_IDLE * ACTION_PER_TIME * game_framework.frame_time) % 2
 
-            if get_time() - self.timer >= 1.0:
+            if get_time() - self.timer >= 0.5:
                 self.chabear.state_machine.handle_state_event(('TIMEOUT', self.chabear.f_dir))
 
         def draw(self):
@@ -112,7 +112,7 @@ class Battack:
         pass
 
     def do(self):
-        if get_time() - self.timer >= 1.0:
+        if get_time() - self.timer >= 0.5:
             self.chabear.state_machine.handle_state_event(('TIMEOUT', self.chabear.f_dir))
 
         self.chabear.frame = (self.chabear.frame + FRAMES_PER_IDLE * ACTION_PER_TIME * game_framework.frame_time) % 2
@@ -183,6 +183,10 @@ class Idle:
 class Chabear:
     images = None
     def __init__(self,x,y):
+        self.hp_bar = load_image('hp_bar.png')
+        self.attack_c = load_image('s_count.png')
+        self.attack_count = 2
+        self.count_time = get_time()
         self.hp = 0
         self.load_images()
         self.x, self.y = x, y
@@ -238,8 +242,11 @@ class Chabear:
         if get_time() - self.load_time > 2 and self.cookie_count < 4:
             self.cookie_count += 1
             self.load_time = get_time()
-        if self.hp <= 0:
-            self.hp = 0
+        if get_time() - self.count_time > 30 and self.attack_count <2:
+            self.attack_count +=1
+            self.count_time = get_time()
+        if self.hp >= 100:
+            self.hp = 100
         game_data.player2_hp = self.hp
         if self.speed_boost and (get_time() - self.speed_boost_time) > 10:
             self.speed_boost = False
@@ -280,10 +287,15 @@ class Chabear:
 
     def draw(self):
         self.state_machine.draw()
-        draw_rectangle(*self.get_bb())
-        self.font.draw(self.x-10, self.y + 50, f'{self.hp:02d}', (0, 0, 0))
+        self.hp_bar.draw(self.x, self.y - 70, 1*self.hp, 20)
+        if self.attack_count >= 1:
+            self.attack_c.draw(self.x - 20, self.y + 60, 20, 20)
+            if self.attack_count ==2:
+                self.attack_c.draw(self.x + 20, self.y + 60, 20, 20)
+
     def get_bb(self):
         return self.x - 35, self.y - 60, self.x + 35, self.y + 40
+
 
     def throw_cookie(self):
         if self.cookie_count >0:
@@ -298,6 +310,7 @@ class Chabear:
     def bear_attack(self):
         bear_attack = Bearattack(self.x, self.y, self.f_dir, self)
         game_world.add_object(bear_attack, 1)
+        self.attack_count -= 1
 
     def speed_booster(self):
         self.speed_boost = True
