@@ -20,7 +20,7 @@ class Attack:
 
     def draw(self):
         self.image.draw(self.x, self.y, 100, 100)
-        draw_rectangle(*self.get_bb())
+        #draw_rectangle(*self.get_bb())
 
     def update(self):
 

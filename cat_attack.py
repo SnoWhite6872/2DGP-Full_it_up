@@ -22,7 +22,7 @@ class Catattack:
 
     def draw(self):
         self.image.draw(self.x, self.y, 200, 200)
-        draw_rectangle(*self.get_bb())
+        #draw_rectangle(*self.get_bb())
 
     def update(self):
         self.v += GRAVITY * PIXEL_PER_METER * game_framework.frame_time
