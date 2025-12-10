@@ -2,10 +2,12 @@ from pico2d import *
 from sdl2 import SDL_KEYDOWN, SDL_KEYUP, SDLK_w, SDLK_a, SDLK_s, SDLK_d, SDLK_q, SDLK_e
 from state_machine import StateMachine
 from cookie import Cookie
+from attack import Attack
 import game_framework
 import game_world
 import game_data
 
+time_out = lambda e: e[0] == 'TIMEOUT'
 
 def event_stop(e):
     return e[0] == 'STOP'
@@ -49,7 +51,7 @@ class Touch:
     def do(self):
         self.chacat.frame = (self.chacat.frame + FRAMES_PER_TOUCH * ACTION_PER_TIME * game_framework.frame_time) % 2
         if get_time() - self.time >= 1:
-            self.chacat.state_machine.handle_state_event(('STOP', None))
+            self.chacat.state_machine.handle_state_event(('STOP', self.chacat.f_dir))
         pass
 
     def draw(self):
@@ -67,6 +69,7 @@ class WAttack:
             if self.chacat.x_dir != 0:
                 self.chacat.f_dir = self.chacat.x_dir
             self.timer = get_time()
+            self.chacat.attack()
 
 
         def exit(self,e):
@@ -75,16 +78,16 @@ class WAttack:
         def do(self):
             # self.chacat.x += self.chacat.x_dir * RUN_SPEED_PPS * game_framework.frame_time
             # self.chacat.y += self.chacat.y_dir * RUN_SPEED_PPS * game_framework.frame_time
-            if get_time() - self.timer >= 1.5:
-                self.chacat.state_machine.handle_state_event(('STOP', self.chacat.f_dir))
+            if get_time() - self.timer >= 1.0:
+                self.chacat.state_machine.handle_state_event(('TIMEOUT', self.chacat.f_dir))
 
             self.chacat.frame = (self.chacat.frame + FRAMES_PER_IDLE * ACTION_PER_TIME * game_framework.frame_time) % 2
 
         def draw(self):
             if self.chacat.f_dir == -1:
-                self.chacat.images['Touch'][1].draw(self.chacat.x, self.chacat.y, 100, 120)
+                self.chacat.images['Run'][1].draw(self.chacat.x, self.chacat.y, 100, 120)
             else:
-                self.chacat.images['Touch'][1].composite_draw(0, 'h', self.chacat.x, self.chacat.y,100, 120)
+                self.chacat.images['Run'][1].composite_draw(0, 'h', self.chacat.x, self.chacat.y,100, 120)
             pass
 
 
@@ -165,6 +168,7 @@ class Chacat:
         self.damage_time = 0
         self.load_time = get_time()
 
+        game_world.add_collision_pair('player:attack', self, None)
         game_world.add_collision_pair('player:cookie', self, None)
         game_world.add_collision_pair('player:item', self, None)
 
@@ -179,7 +183,7 @@ class Chacat:
         {
             self.IDLE: {event_touch: self.TOUCH,e_down: self.IDLE,q_down: self.WATTACK, event_run : self.RUN},
             self.RUN: {event_touch: self.TOUCH, e_down:self.RUN,q_down: self.WATTACK, event_stop : self.IDLE},
-            self.WATTACK : {event_stop: self.IDLE},
+            self.WATTACK : {time_out: self.IDLE},
             self.TOUCH : { event_stop : self.IDLE}
 
             }
@@ -206,6 +210,8 @@ class Chacat:
         if self.damage_a and (get_time() - self.damage_time) > 100:
             self.damage_a = False
 
+        self.x = clamp(20 , self.x , 1460)
+        self.y = clamp(20 , self.y , 1030)
         pass
 
     def draw(self):
@@ -244,10 +250,17 @@ class Chacat:
             self.state_machine.handle_state_event(('INPUT', event))
 
     def throw_cookie(self):
-        cookie = Cookie(self.x, self.y, self.f_dir * 25, self.f_dir, self)
-        game_world.add_object(cookie, 1)
-        #game_world.add_collision_pair('player:cookie', None, cookie)
-        self.cookie_count -= 1
+        if self.cookie_count > 0:
+            cookie = Cookie(self.x, self.y, self.f_dir * 25, self.f_dir, self)
+            game_world.add_object(cookie, 1)
+            #game_world.add_collision_pair('player:cookie', None, cookie)
+            self.cookie_count -= 1
+
+
+    def attack(self):
+        attack = Attack(self.x, self.y, self.f_dir, self)
+        game_world.add_object(attack, 1)
+        pass
 
     def speed_booster(self):
         self.speed_boost = True
@@ -270,7 +283,7 @@ class Chacat:
                 damage = 20
             self.hp += damage
             print('cat hp + 10')
-            self.state_machine.handle_state_event(('TOUCH', None))
+            self.state_machine.handle_state_event(('TOUCH', self.f_dir))
         if group == 'player:item':
             if other.effect == 'heal':
                 self.hp -= 15
@@ -279,3 +292,10 @@ class Chacat:
             elif other.effect == 'damage':
                 self.damage_plus()
                 pass
+        if group == 'player:attack':
+            damage = 10
+            if other.owner.damage_a:
+                damage = 20
+            self.hp += damage
+            print('cat hp + 10')
+            self.state_machine.handle_state_event(('TOUCH', self.f_dir))
