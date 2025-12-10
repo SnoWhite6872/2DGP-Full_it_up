@@ -63,7 +63,7 @@ def init():
     #충돌 관리
     game_world.add_collision_pair('player:player', char1, None)
     game_world.add_collision_pair('player:player', char2, None)
-    #game_world.add_collision_pair('chacat:icetea', None, ice_tea)
+
 
 
     pass
@@ -72,7 +72,7 @@ def spawn_item():
     global timer
 
     item_effects = ['heal', 'speed', 'damage']
-    if get_time() - timer > 2:
+    if get_time() - timer > 10:
         item_random = choice(item_effects)
         item = Item(item_random)
         game_world.add_object(item, 1)
