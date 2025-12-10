@@ -191,7 +191,7 @@ class Charain:
     def __init__(self,x,y):
         self.hp_bar = load_image('hp_bar.png')
         self.attack_c = load_image('s_count.png')
-        self.attack_count = 2
+        self.attack_count = 1
         self.count_time = get_time()
         self.load_images()
         self.hp = 0
@@ -245,7 +245,7 @@ class Charain:
         if get_time() - self.load_time > 2 and self.cookie_count < 4:
             self.cookie_count += 1
             self.load_time = get_time()
-        if get_time() - self.count_time > 30 and self.attack_count <2:
+        if get_time() - self.count_time > 10 and self.attack_count <2:
             self.attack_count +=1
             self.count_time = get_time()
         if self.hp >= 100:
