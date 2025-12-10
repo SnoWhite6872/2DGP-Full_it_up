@@ -23,7 +23,6 @@ class Rcookie:
 
     def draw(self):
         self.image.draw(self.x, self.y, 60, 60)
-        draw_rectangle(*self.get_bb())
 
     def update(self):
         if get_time() - self.timer > 0.3:
