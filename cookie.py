@@ -17,7 +17,7 @@ class Cookie:
 
     def draw(self):
         self.image.draw(self.x, self.y, 50, 50)
-        draw_rectangle(*self.get_bb())
+        #draw_rectangle(*self.get_bb())
 
     def update(self):
         self.x += self.speed * game_framework.frame_time * PIXEL_PER_METER
