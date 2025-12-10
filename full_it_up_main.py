@@ -28,6 +28,9 @@ def handle_events():
             game_framework.quit()
         elif game_data.game_end == 1 and event.type == SDL_KEYDOWN and event.key ==SDLK_SPACE:
             game_framework.change_mode(select_mod)
+            game_data.player1_hp = 0
+            game_data.player2_hp = 0
+            game_data.game_end = 0
         else:
             p1.handle_event(event)
             p2.handle_event(event)
