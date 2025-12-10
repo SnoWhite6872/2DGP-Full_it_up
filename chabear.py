@@ -3,6 +3,7 @@ from sdl2 import *
 from state_machine import StateMachine
 from cookie import Cookie
 from attack import Attack
+from bear_attack import Bearattack
 import game_world
 import game_framework
 import game_data
@@ -35,6 +36,9 @@ def q_down(e):
 
 def e_down(e):
     return e[0] == 'INPUT' and e[1].type == SDL_KEYDOWN and e[1].key == SDLK_e
+
+def r_down(e):
+    return e[0] == 'INPUT' and e[1].type == SDL_KEYDOWN and e[1].key == SDLK_r
 
 def event_touch(e):
     return e[0] == 'TOUCH'
@@ -92,6 +96,34 @@ class WAttack:
             else:
                 self.chabear.images['Run'][1].composite_draw(0, 'h', self.chabear.x, self.chabear.y, 100, 120)
             pass
+
+class Battack:
+    def __init__(self, chabear):
+        self.chabear = chabear
+        self.timer = 0
+
+    def enter(self, e):
+        if self.chabear.x_dir != 0:
+            self.chabear.f_dir = self.chabear.x_dir
+        self.timer = get_time()
+        self.chabear.bear_attack()
+
+    def exit(self, e):
+        pass
+
+    def do(self):
+        if get_time() - self.timer >= 1.0:
+            self.chabear.state_machine.handle_state_event(('TIMEOUT', self.chabear.f_dir))
+
+        self.chabear.frame = (self.chabear.frame + FRAMES_PER_IDLE * ACTION_PER_TIME * game_framework.frame_time) % 2
+
+    def draw(self):
+        if self.chabear.f_dir == -1:
+            self.chabear.images['Run'][1].draw(self.chabear.x, self.chabear.y, 100, 120)
+        else:
+            self.chabear.images['Run'][1].composite_draw(0, 'h', self.chabear.x, self.chabear.y, 100, 120)
+        pass
+
 
 class Run:
     def __init__(self, chabear):
@@ -164,6 +196,9 @@ class Chabear:
         self.damage_time = 0
         self.load_time = get_time()
         self.cookie_count = 0
+
+        game_world.add_collision_pair('player:rattack', self, None)
+        game_world.add_collision_pair('player:cattack', self, None)
         game_world.add_collision_pair('player:attack', self, None)
         game_world.add_collision_pair('player:cookie', self, None)
         game_world.add_collision_pair('player:item', self, None)
@@ -173,14 +208,16 @@ class Chabear:
         self.IDLE = Idle(self)
         self.WATTACK = WAttack(self)
         self.TOUCH = Touch(self)
+        self.BATTACK = Battack(self)
 
         self.state_machine = StateMachine(
             self.IDLE,               #시작 state
         {
 
-                self.IDLE: {event_touch: self.TOUCH, e_down: self.IDLE, q_down: self.WATTACK,event_run: self.RUN},
-                self.RUN: {event_touch: self.TOUCH, e_down: self.RUN, q_down: self.WATTACK,event_stop: self.IDLE},
+                self.IDLE: {event_touch: self.TOUCH, e_down: self.IDLE, q_down: self.WATTACK,event_run: self.RUN, r_down: self.BATTACK},
+                self.RUN: {event_touch: self.TOUCH, e_down: self.RUN, q_down: self.WATTACK,event_stop: self.IDLE,r_down: self.BATTACK},
                 self.WATTACK : { time_out : self.IDLE},
+                self.BATTACK: {time_out: self.IDLE},
                 self.TOUCH : { event_stop : self.IDLE}
             }
         )
@@ -258,6 +295,10 @@ class Chabear:
         attack = Attack(self.x, self.y, self.f_dir, self)
         game_world.add_object(attack,1)
 
+    def bear_attack(self):
+        bear_attack = Bearattack(self.x, self.y, self.f_dir, self)
+        game_world.add_object(bear_attack, 1)
+
     def speed_booster(self):
         self.speed_boost = True
         self.speed_boost_time = get_time()
@@ -289,6 +330,22 @@ class Chabear:
             damage = 10
             if other.owner.damage_a:
                 damage = 20
+            self.hp += damage
+            print('cat hp + 10')
+            self.state_machine.handle_state_event(('TOUCH', self.f_dir))
+
+        if group == 'player:cattack':
+            damage = 30
+            if other.owner.damage_a:
+                damage = 40
+            self.hp += damage
+            print('cat hp + 10')
+            self.state_machine.handle_state_event(('TOUCH', self.f_dir))
+
+        if group == 'player:rattack':
+            damage = 12
+            if other.owner.damage_a:
+                damage = 18
             self.hp += damage
             print('cat hp + 10')
             self.state_machine.handle_state_event(('TOUCH', self.f_dir))

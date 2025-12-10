@@ -3,11 +3,15 @@ from sdl2 import SDL_KEYDOWN, SDL_KEYUP, SDLK_w, SDLK_a, SDLK_s, SDLK_d, SDLK_q,
 from state_machine import StateMachine
 from cookie import Cookie
 from attack import Attack
+from r_cookie import Rcookie
 import game_framework
 import game_world
 import game_data
 
 time_out = lambda e: e[0] == 'TIMEOUT'
+
+def r_down(e):
+    return e[0] == 'INPUT' and e[1].type == SDL_KEYDOWN and e[1].key == SDLK_r
 
 def event_stop(e):
     return e[0] == 'STOP'
@@ -91,6 +95,37 @@ class WAttack:
             pass
 
 
+class Rattack:
+    def __init__(self, charain):
+        self.charain = charain
+        self.timer = 0
+
+    def enter(self, e):
+        if self.charain.x_dir != 0:
+            self.charain.f_dir = self.charain.x_dir
+        self.timer = get_time()
+        self.charain.rain_attack()
+
+    def exit(self, e):
+        pass
+
+    def do(self):
+
+
+        if get_time() - self.timer >= 0.5:
+            self.charain.state_machine.handle_state_event(('TIMEOUT', self.charain.f_dir))
+
+        self.charain.frame = (self.charain.frame + FRAMES_PER_IDLE * ACTION_PER_TIME * game_framework.frame_time) % 2
+
+    def draw(self):
+        if self.charain.f_dir == -1:
+            self.charain.images['Run'][int(self.charain.frame)].draw(self.charain.x, self.charain.y, 100, 120)
+        else:
+            self.charain.images['Run'][int(self.charain.frame)].composite_draw(0, 'h', self.charain.x, self.charain.y,
+                                                                               100, 120)
+        pass
+
+
 
 class Run:
         def __init__(self, charain):
@@ -168,6 +203,8 @@ class Charain:
         self.damage_time = 0
         self.load_time = get_time()
 
+        game_world.add_collision_pair('player:battack', self, None)
+        game_world.add_collision_pair('player:cattack', self, None)
         game_world.add_collision_pair('player:attack', self, None)
         game_world.add_collision_pair('player:cookie', self, None)
         game_world.add_collision_pair('player:item', self, None)
@@ -177,13 +214,15 @@ class Charain:
         self.RUN = Run(self)
         self.IDLE = Idle(self)
         self.WATTACK = WAttack(self)
+        self.RATTACK = Rattack(self)
 
         self.state_machine = StateMachine(
             self.IDLE,
         {
-            self.IDLE: {event_touch: self.TOUCH,e_down: self.IDLE,q_down: self.WATTACK, event_run : self.RUN},
-            self.RUN: {event_touch: self.TOUCH, e_down:self.RUN,q_down: self.WATTACK, event_stop : self.IDLE},
+            self.IDLE: {event_touch: self.TOUCH,e_down: self.IDLE, q_down: self.WATTACK, event_run : self.RUN, r_down: self.RATTACK},
+            self.RUN: {event_touch: self.TOUCH, e_down:self.RUN, q_down: self.WATTACK, event_stop : self.IDLE, r_down: self.RATTACK},
             self.WATTACK : {time_out: self.IDLE},
+            self.RATTACK : {time_out: self.IDLE},
             self.TOUCH : { event_stop : self.IDLE}
 
             }
@@ -261,6 +300,12 @@ class Charain:
         attack = Attack(self.x, self.y, self.f_dir, self)
         game_world.add_object(attack,1)
 
+    def rain_attack(self):
+        for i in range(1, 6):
+            rain_attack = Rcookie(self.x, self.y + 400 - 100*i , self.f_dir, self)
+            game_world.add_object(rain_attack,1)
+
+
     def speed_booster(self):
         self.speed_boost = True
         self.speed_boost_time = get_time()
@@ -295,6 +340,21 @@ class Charain:
             damage = 10
             if other.owner.damage_a:
                 damage = 20
+            self.hp += damage
+            print('cat hp + 10')
+            self.state_machine.handle_state_event(('TOUCH', self.f_dir))
+        if group == 'player:cattack':
+            damage = 30
+            if other.owner.damage_a:
+                damage = 400
+            self.hp += damage
+            print('cat hp + 10')
+            self.state_machine.handle_state_event(('TOUCH', self.f_dir))
+
+        if group == 'player:cattack':
+            damage = 30
+            if other.owner.damage_a:
+                damage = 40
             self.hp += damage
             print('cat hp + 10')
             self.state_machine.handle_state_event(('TOUCH', self.f_dir))

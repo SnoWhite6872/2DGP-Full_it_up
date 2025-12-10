@@ -1,8 +1,9 @@
 from pico2d import *
-from sdl2 import SDL_KEYDOWN, SDL_KEYUP, SDLK_w, SDLK_a, SDLK_s, SDLK_d, SDLK_q, SDLK_e
+from sdl2 import SDL_KEYDOWN, SDL_KEYUP, SDLK_w, SDLK_a, SDLK_s, SDLK_d, SDLK_q, SDLK_e, SDLK_r
 from state_machine import StateMachine
 from cookie import Cookie
 from attack import Attack
+from cat_attack import Catattack
 import game_framework
 import game_world
 import game_data
@@ -16,10 +17,13 @@ def event_run(e):
     return e[0] == 'RUN'
 
 def q_down(e):
-    return e[0] == 'INPUT' and e[1].type == SDL_KEYDOWN and e[1].key == SDLK_q #1p 약공격
+    return e[0] == 'INPUT' and e[1].type == SDL_KEYDOWN and e[1].key == SDLK_q
 
 def e_down(e):
     return e[0] == 'INPUT' and e[1].type == SDL_KEYDOWN and e[1].key == SDLK_e
+
+def r_down(e):
+    return e[0] == 'INPUT' and e[1].type == SDL_KEYDOWN and e[1].key == SDLK_r
 
 def event_touch(e):
     return e[0] == 'TOUCH'
@@ -76,9 +80,7 @@ class WAttack:
             pass
 
         def do(self):
-            # self.chacat.x += self.chacat.x_dir * RUN_SPEED_PPS * game_framework.frame_time
-            # self.chacat.y += self.chacat.y_dir * RUN_SPEED_PPS * game_framework.frame_time
-            if get_time() - self.timer >= 1.0:
+            if get_time() - self.timer >= 0.5:
                 self.chacat.state_machine.handle_state_event(('TIMEOUT', self.chacat.f_dir))
 
             self.chacat.frame = (self.chacat.frame + FRAMES_PER_IDLE * ACTION_PER_TIME * game_framework.frame_time) % 2
@@ -89,6 +91,34 @@ class WAttack:
             else:
                 self.chacat.images['Run'][1].composite_draw(0, 'h', self.chacat.x, self.chacat.y,100, 120)
             pass
+
+
+class Cattack:
+    def __init__(self, chacat):
+        self.chacat = chacat
+        self.timer = 0
+
+    def enter(self, e):
+        if self.chacat.x_dir != 0:
+            self.chacat.f_dir = self.chacat.x_dir
+        self.timer = get_time()
+        self.chacat.cat_attack()
+
+    def exit(self, e):
+        pass
+
+    def do(self):
+        if get_time() - self.timer >= 1.0:
+            self.chacat.state_machine.handle_state_event(('TIMEOUT', self.chacat.f_dir))
+
+        self.chacat.frame = (self.chacat.frame + FRAMES_PER_IDLE * ACTION_PER_TIME * game_framework.frame_time) % 2
+
+    def draw(self):
+        if self.chacat.f_dir == -1:
+            self.chacat.images['Run'][1].draw(self.chacat.x, self.chacat.y, 100, 120)
+        else:
+            self.chacat.images['Run'][1].composite_draw(0, 'h', self.chacat.x, self.chacat.y, 100, 120)
+        pass
 
 
 
@@ -168,6 +198,8 @@ class Chacat:
         self.damage_time = 0
         self.load_time = get_time()
 
+        game_world.add_collision_pair('player:rattack', self, None)
+        game_world.add_collision_pair('player:battack', self, None)
         game_world.add_collision_pair('player:attack', self, None)
         game_world.add_collision_pair('player:cookie', self, None)
         game_world.add_collision_pair('player:item', self, None)
@@ -177,14 +209,16 @@ class Chacat:
         self.RUN = Run(self)
         self.IDLE = Idle(self)
         self.WATTACK = WAttack(self)
+        self.CATTACK = Cattack(self)
 
         self.state_machine = StateMachine(
             self.IDLE,
         {
-            self.IDLE: {event_touch: self.TOUCH,e_down: self.IDLE,q_down: self.WATTACK, event_run : self.RUN},
-            self.RUN: {event_touch: self.TOUCH, e_down:self.RUN,q_down: self.WATTACK, event_stop : self.IDLE},
+            self.IDLE: {event_touch: self.TOUCH,e_down: self.IDLE,q_down: self.WATTACK, event_run : self.RUN, r_down: self.CATTACK},
+            self.RUN: {event_touch: self.TOUCH, e_down:self.RUN,q_down: self.WATTACK, event_stop : self.IDLE, r_down: self.CATTACK},
             self.WATTACK : {time_out: self.IDLE},
-            self.TOUCH : { event_stop : self.IDLE}
+            self.TOUCH : { event_stop : self.IDLE},
+            self.CATTACK : {time_out: self.IDLE}
 
             }
         )
@@ -262,6 +296,10 @@ class Chacat:
         game_world.add_object(attack, 1)
         pass
 
+    def cat_attack(self):
+        cat_attack = Catattack(self.x, self.y, self.f_dir, self)
+        game_world.add_object(cat_attack, 1)
+
     def speed_booster(self):
         self.speed_boost = True
         self.speed_boost_time = get_time()
@@ -296,6 +334,22 @@ class Chacat:
             damage = 10
             if other.owner.damage_a:
                 damage = 20
+            self.hp += damage
+            print('cat hp + 10')
+            self.state_machine.handle_state_event(('TOUCH', self.f_dir))
+
+        if group == 'player:battack':
+            damage = 30
+            if other.owner.damage_a:
+                damage = 40
+            self.hp += damage
+            print('cat hp + 10')
+            self.state_machine.handle_state_event(('TOUCH', self.f_dir))
+
+        if group == 'player:rattack':
+            damage = 12
+            if other.owner.damage_a:
+                damage = 18
             self.hp += damage
             print('cat hp + 10')
             self.state_machine.handle_state_event(('TOUCH', self.f_dir))
