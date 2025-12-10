@@ -189,6 +189,10 @@ class Idle:
 class Charain:
     images = None
     def __init__(self,x,y):
+        self.hp_bar = load_image('hp_bar.png')
+        self.attack_c = load_image('s_count.png')
+        self.attack_count = 2
+        self.count_time = get_time()
         self.load_images()
         self.hp = 0
         self.x, self.y = x,y
@@ -241,8 +245,11 @@ class Charain:
         if get_time() - self.load_time > 2 and self.cookie_count < 4:
             self.cookie_count += 1
             self.load_time = get_time()
-        if self.hp <= 0:
-            self.hp = 0
+        if get_time() - self.count_time > 30 and self.attack_count <2:
+            self.attack_count +=1
+            self.count_time = get_time()
+        if self.hp >= 100:
+            self.hp = 100
         game_data.player1_hp = self.hp
         if self.speed_boost and (get_time() - self.speed_boost_time) > 10:
             self.speed_boost = False
@@ -256,8 +263,12 @@ class Charain:
 
     def draw(self):
         self.state_machine.draw()
-        self.font.draw(self.x-10, self.y + 50, f'{self.hp:02d}', (255, 255, 255))
-        draw_rectangle(*self.get_bb())
+
+        self.hp_bar.draw(self.x, self.y - 70, 1*self.hp, 20)
+        if self.attack_count >= 1:
+            self.attack_c.draw(self.x - 20, self.y + 60, 20, 20)
+            if self.attack_count ==2:
+                self.attack_c.draw(self.x + 20, self.y + 60, 20, 20)
         pass
 
     def handle_event(self, event):
@@ -302,8 +313,9 @@ class Charain:
 
     def rain_attack(self):
         for i in range(1, 6):
-            rain_attack = Rcookie(self.x, self.y + 400 - 100*i , self.f_dir, self)
+            rain_attack = Rcookie(self.x, self.y + 200 -75*i , self.f_dir, self)
             game_world.add_object(rain_attack,1)
+        self.attack_count -= 1
 
 
     def speed_booster(self):
