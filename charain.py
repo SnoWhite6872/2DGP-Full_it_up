@@ -2,10 +2,12 @@ from pico2d import *
 from sdl2 import SDL_KEYDOWN, SDL_KEYUP, SDLK_w, SDLK_a, SDLK_s, SDLK_d, SDLK_q, SDLK_e
 from state_machine import StateMachine
 from cookie import Cookie
+from attack import Attack
 import game_framework
 import game_world
 import game_data
 
+time_out = lambda e: e[0] == 'TIMEOUT'
 
 def event_stop(e):
     return e[0] == 'STOP'
@@ -49,12 +51,12 @@ class Touch:
     def do(self):
         self.charain.frame = (self.charain.frame + FRAMES_PER_TOUCH * ACTION_PER_TIME * game_framework.frame_time) % 2
         if get_time() - self.time >= 1:
-            self.charain.state_machine.handle_state_event(('STOP', None))
+            self.charain.state_machine.handle_state_event(('STOP', self.charain.f_dir))
         pass
 
     def draw(self):
         if self.charain.f_dir == -1:
-            self.charain.images['Touch'][1].draw(self.charain.x, self.charain.y, 100, 120)
+            self.charain.images['Touch'][1].draw(self.charain.x, self.charain.y, 110, 125)
         else:
             self.charain.images['Touch'][1].composite_draw(0, 'h',self.charain.x, self.charain.y, 100, 120)
 
@@ -66,25 +68,26 @@ class WAttack:
         def enter(self,e):
             if self.charain.x_dir != 0:
                 self.charain.f_dir = self.charain.x_dir
-            self.timer = 300
+            self.timer = get_time()
+            self.charain.attack()
 
         def exit(self,e):
             pass
 
         def do(self):
-            self.charain.x += self.charain.x_dir * RUN_SPEED_PPS * game_framework.frame_time
-            self.charain.y += self.charain.y_dir * RUN_SPEED_PPS * game_framework.frame_time
+            # self.charain.x += self.charain.x_dir * RUN_SPEED_PPS * game_framework.frame_time
+            # self.charain.y += self.charain.y_dir * RUN_SPEED_PPS * game_framework.frame_time
             self.timer -= 1
-            if self.timer <= 0:
-                self.charain.state_machine.handle_state_event(('RUN', None))
+            if get_time() - self.timer >= 0.5:
+                self.charain.state_machine.handle_state_event(('TIMEOUT', self.charain.f_dir))
 
             self.charain.frame = (self.charain.frame + FRAMES_PER_IDLE * ACTION_PER_TIME * game_framework.frame_time) % 2
 
         def draw(self):
             if self.charain.f_dir == -1:
-                self.charain.images['Touch'][int(self.charain.frame)].draw(self.charain.x, self.charain.y, 100, 120)
+                self.charain.images['Run'][int(self.charain.frame)].draw(self.charain.x, self.charain.y, 100, 120)
             else:
-                self.charain.images['Touch'][int(self.charain.frame)].composite_draw(0, 'h', self.charain.x, self.charain.y,100, 120)
+                self.charain.images['Run'][int(self.charain.frame)].composite_draw(0, 'h', self.charain.x, self.charain.y,100, 120)
             pass
 
 
@@ -165,6 +168,7 @@ class Charain:
         self.damage_time = 0
         self.load_time = get_time()
 
+        game_world.add_collision_pair('player:attack', self, None)
         game_world.add_collision_pair('player:cookie', self, None)
         game_world.add_collision_pair('player:item', self, None)
 
@@ -179,7 +183,7 @@ class Charain:
         {
             self.IDLE: {event_touch: self.TOUCH,e_down: self.IDLE,q_down: self.WATTACK, event_run : self.RUN},
             self.RUN: {event_touch: self.TOUCH, e_down:self.RUN,q_down: self.WATTACK, event_stop : self.IDLE},
-            self.WATTACK : {event_stop: self.IDLE},
+            self.WATTACK : {time_out: self.IDLE},
             self.TOUCH : { event_stop : self.IDLE}
 
             }
@@ -205,6 +209,9 @@ class Charain:
             self.speed_boost = False
         if self.damage_a and (get_time() - self.damage_time) > 100:
             self.damage_a = False
+
+        self.x = clamp(20 , self.x , 1460)
+        self.y = clamp(20 , self.y , 1030)
 
         pass
 
@@ -244,10 +251,15 @@ class Charain:
             self.state_machine.handle_state_event(('INPUT', event))
 
     def throw_cookie(self):
-        cookie = Cookie(self.x, self.y, self.f_dir * 25, self.f_dir, self)
-        game_world.add_object(cookie, 1)
-        #game_world.add_collision_pair('player:cookie', None, cookie)
-        self.cookie_count -= 1
+        if self.cookie_count > 0:
+            cookie = Cookie(self.x, self.y, self.f_dir * 25, self.f_dir, self)
+            game_world.add_object(cookie, 1)
+            #game_world.add_collision_pair('player:cookie', None, cookie)
+            self.cookie_count -= 1
+
+    def attack(self):
+        attack = Attack(self.x, self.y, self.f_dir, self)
+        game_world.add_object(attack,1)
 
     def speed_booster(self):
         self.speed_boost = True
@@ -270,7 +282,7 @@ class Charain:
                 damage = 20
             self.hp += damage
             print('cat hp + 10')
-            self.state_machine.handle_state_event(('TOUCH', None))
+            self.state_machine.handle_state_event(('TOUCH', self.f_dir))
         if group == 'player:item':
             if other.effect == 'heal':
                 self.hp -= 15
@@ -279,3 +291,10 @@ class Charain:
             elif other.effect == 'damage':
                 self.damage_plus()
                 pass
+        if group == 'player:attack':
+            damage = 10
+            if other.owner.damage_a:
+                damage = 20
+            self.hp += damage
+            print('cat hp + 10')
+            self.state_machine.handle_state_event(('TOUCH', self.f_dir))
